@@ -1,0 +1,34 @@
+# CI half of the deploy: build the static-site container image + publish it on every
+# push to main. (Interim: GitHub Actions → ghcr.io. Migrates to DAS Phase 2 → Harbor later.)
+# The DEPLOY half (ArgoCD Application + Cloudflare tunnel route) lands after the BGP switchover.
+name: build-and-publish
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: |
+            ghcr.io/pumapumapumas/portfolio:latest
+            ghcr.io/pumapumapumas/portfolio:${{ github.sha }}
