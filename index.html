@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Your Name — Portfolio</title>
+  <meta name="description" content="Software architect & infrastructure engineer — selected work." />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="container">
+
+    <!-- ===== HERO  (edit name / tagline / intro) ===== -->
+    <header class="hero">
+      <h1 class="hero__name">Your Name</h1>
+      <p class="hero__tagline">Software architect · infrastructure engineer · biomedical informatics (M.S.)</p>
+      <p class="hero__intro">
+        I build complete systems end to end — from a self-hosted private cloud to the
+        businesses that run on top of it.
+      </p>
+      <nav class="hero__links">
+        <a href="mailto:you@example.com">Email</a>
+        <a href="https://github.com/yourhandle" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://linkedin.com/in/yourhandle" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="/resume.pdf" target="_blank" rel="noopener">Résumé</a>
+      </nav>
+    </header>
+
+    <!-- ===== ABOUT  (edit the paragraph) ===== -->
+    <section class="about">
+      <h2 class="section__title">About</h2>
+      <p>
+        I'm a software architect and engineer who builds whole systems, not just pieces.
+        Most recently I designed and built a self-hosted private cloud — Kubernetes, Temporal,
+        Ceph, GitOps, foundation-up — and I bring the same end-to-end, automate-everything
+        approach to the businesses I run on top of my own infrastructure. I'm also completing
+        an M.S. in biomedical informatics.
+      </p>
+    </section>
+
+    <!-- ===== PROJECTS  (data lives in projects.js — don't edit this block) ===== -->
+    <section class="projects">
+      <h2 class="section__title">Projects</h2>
+      <div id="projects" class="grid"></div>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="footer">
+      <p>© <span id="year"></span> Your Name · built &amp; self-hosted on my own cloud.</p>
+    </footer>
+
+  </main>
+  <script src="projects.js"></script>
+</body>
+</html>

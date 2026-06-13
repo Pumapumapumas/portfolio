@@ -1,0 +1,97 @@
+/* ============================================================
+   CENTRAL STYLE — change these variables to re-theme the WHOLE site.
+   This block is the single source of truth for the look.
+   ============================================================ */
+:root {
+  --bg:        #0e0f13;
+  --surface:   #16181f;
+  --surface-2: #1d2029;
+  --border:    #262a35;
+  --text:      #e7e9ee;
+  --muted:     #9aa0ad;
+  --accent:    #5b8cff;
+  --accent-2:  #7c5cff;
+  --radius:    14px;
+  --maxw:      900px;
+  --font:      -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --mono:      "SF Mono", "JetBrains Mono", "Fira Code", ui-monospace, monospace;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+.container { max-width: var(--maxw); margin: 0 auto; padding: 0 24px; }
+
+/* ---- HERO ---- */
+.hero { padding: 96px 0 56px; }
+.hero__name {
+  font-size: clamp(2.4rem, 6vw, 3.6rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  background: linear-gradient(120deg, var(--accent), var(--accent-2));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.hero__tagline { color: var(--muted); font-size: 1.05rem; margin-top: 10px; }
+.hero__intro { margin-top: 20px; max-width: 58ch; font-size: 1.12rem; }
+.hero__links { display: flex; gap: 14px; margin-top: 28px; flex-wrap: wrap; }
+.hero__links a {
+  color: var(--text); text-decoration: none; font-size: 0.95rem;
+  padding: 8px 16px; border: 1px solid var(--border); border-radius: 999px;
+  transition: border-color .15s, color .15s, transform .15s;
+}
+.hero__links a:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-1px); }
+
+/* ---- SECTIONS ---- */
+section { padding: 36px 0; }
+.section__title {
+  font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.14em;
+  color: var(--muted); margin-bottom: 22px;
+}
+.about p { max-width: 65ch; }
+
+/* ---- PROJECT GRID (tiles render from projects.js) ---- */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 18px;
+}
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 22px;
+  display: flex; flex-direction: column; gap: 12px;
+  transition: transform .15s, border-color .15s, background .15s;
+}
+.card:hover { transform: translateY(-3px); border-color: var(--accent); background: var(--surface-2); }
+.card__head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+.card__title { font-size: 1.15rem; font-weight: 650; }
+.card__year { color: var(--muted); font-size: 0.78rem; font-family: var(--mono); white-space: nowrap; }
+.card__desc { color: var(--muted); font-size: 0.95rem; flex: 1; }
+.card__tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.tag {
+  font-size: 0.72rem; font-family: var(--mono);
+  color: var(--accent); background: rgba(91, 140, 255, 0.10);
+  padding: 3px 9px; border-radius: 6px;
+}
+.card__links { display: flex; gap: 14px; margin-top: 2px; }
+.card__links a { color: var(--accent); text-decoration: none; font-size: 0.85rem; }
+.card__links a:hover { text-decoration: underline; }
+
+/* ---- FOOTER ---- */
+.footer {
+  padding: 52px 0; margin-top: 24px;
+  color: var(--muted); font-size: 0.85rem;
+  border-top: 1px solid var(--border);
+}
+
+/* ---- RESPONSIVE ---- */
+@media (max-width: 560px) { .hero { padding: 64px 0 40px; } }
