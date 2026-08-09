@@ -30,14 +30,14 @@ docker build -t portfolio .
 docker run --rm -p 8080:8080 portfolio
 ```
 
-The image is built on `nginx-unprivileged`: it runs as uid 101 and serves on **:8080**, not
-:80. That is required — the cluster it deploys to enforces Pod Security Admission
-`restricted`, which rejects root containers, and a non-root process cannot bind :80.
+The image runs as uid 101 and serves on **:8080**, not :80 — the target cluster enforces
+Pod Security Admission `restricted`. The comment at the top of the `Dockerfile` is the
+canonical explanation; don't change the base or the port without reading it.
 
 To check the image still satisfies that contract:
 
 ```sh
-./test/verify-image.sh
+./testing/run-all.sh
 ```
 
 Every push to `main` publishes the image to `ghcr.io/pumapumapumas/portfolio`; the run's

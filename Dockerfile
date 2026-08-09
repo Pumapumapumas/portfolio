@@ -11,10 +11,14 @@
 # nginxinc/nginx-unprivileged:1.27-alpine` (multi-arch index digest).
 FROM nginxinc/nginx-unprivileged:1.27-alpine@sha256:65e3e85dbaed8ba248841d9d58a899b6197106c23cb0ff1a132b7bfe0547e4c0
 
-COPY index.html style.css projects.js /usr/share/nginx/html/
+# --chown is not cosmetic: COPY defaults to root:root regardless of the base's USER, so
+# without it nginx-as-101 can only read these files by virtue of their source mode bits.
+# A future asset committed mode 600 would 403 at runtime with no build-time signal.
+COPY --chown=101:101 index.html style.css projects.js /usr/share/nginx/html/
 # COPY assets/ /usr/share/nginx/html/assets/   # uncomment once you add images
 
-# Both are inherited from the base already; restated here so this repo's own image
-# still satisfies `restricted` if the base ever changes them.
+# USER is inherited from the base already; restated so a base change cannot silently
+# reintroduce a root default. EXPOSE is metadata only — it documents the port, it does
+# not cause nginx to bind it (the base's nginx.conf does that).
 USER 101
 EXPOSE 8080

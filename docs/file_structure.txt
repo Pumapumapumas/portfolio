@@ -1,0 +1,34 @@
+# Portfolio File Structure
+
+portfolio/                                      # Static portfolio site — publishes its own container image
+│
+├── CLAUDE.md                                   # AI development rules — standards that bind this repo
+├── README.md                                   # Repo overview, local preview, deploy + verification commands
+├── Dockerfile                                  # Image build. CANONICAL explanation of the non-root/:8080
+│                                               #   contract lives in its header comment — read before
+│                                               #   changing the base image or the port.
+│
+├── index.html                                  # The page (hero · about · projects · footer). Operator-owned content.
+├── style.css                                   # The look. The `:root` block is the central theme.
+├── projects.js                                 # The project data — each entry in `projects` renders one tile.
+│
+├── .github/
+│   └── workflows/
+│       └── build.yml                           # Builds + pushes the image to ghcr.io on every push to main.
+│                                               #   Surfaces the published digest as a job output, on stdout,
+│                                               #   and in the step summary (Image Pipeline Standard §6.2).
+│
+├── testing/                                    # Tier-1 test location (Testing Standard, Multi-Repo Conventions)
+│   ├── run-all.sh                              # Master runner — globs verify-*.sh. All suites must be reachable here.
+│   └── verify-image.sh                         # Asserts the PSA-`restricted` image contract: non-root uid 101,
+│                                               #   listens :8080, serves this repo's real content.
+│
+└── docs/
+    └── file_structure.txt                      # This file — annotated repo map.
+
+# NOT in this repo:
+#   - The Helm chart that deploys this image      -> skyy-command/deployments/workload/portfolio/chart/
+#   - Per-cluster values for k3s-w1               -> desired-state-sturdy-wheat-pelican/container/k3s-w1/workload/portfolio/
+#   - Platform standards                          -> mdc-master-planning/standards/
+#   - assets/                                     -> does not exist yet; the Dockerfile's COPY line for it is
+#                                                    intentionally commented out until images are added.

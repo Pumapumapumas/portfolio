@@ -1,18 +1,21 @@
 #!/usr/bin/env bash
 # Asserts the three properties k3s-w1's Pod Security Admission `restricted` stance
-# requires of this image. If any fails, the image is unrunnable on the target cluster
-# — which is exactly the defect that made the live deployment fall back to a ConfigMap.
+# requires of this image: non-root uid 101, listens on :8080, serves this repo's real
+# content. The Dockerfile comment is the canonical explanation of WHY — read it there.
 #
-#   1. runs as non-root (uid 101)
-#   2. serves on :8080 (a non-root process cannot bind :80)
-#   3. serves this repo's real content, not nginx's default page
+# Scope: this verifies the IMAGE. It does not verify the deployed pod — the chart
+# currently mounts a ConfigMap read-only over /usr/share/nginx/html, which SHADOWS
+# (does not merge with) the content baked in here. A green run of this script is not
+# proof that the pod serves this image's content.
 #
-# Usage: ./test/verify-image.sh [image-tag]   (default: builds portfolio:verify from ./)
+# Usage: ./testing/verify-image.sh [image-tag]   (default: builds portfolio:verify from ./)
 set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 IMAGE="${1:-portfolio:verify}"
 CONTAINER="portfolio-verify-$$"
+# Not 8080 — the README's own `docker run` example takes that, and a developer with the
+# site up locally would otherwise get a confusing bind failure. Override if it collides.
 HOST_PORT="${HOST_PORT:-18080}"
 
 cleanup() { docker rm -f "$CONTAINER" >/dev/null 2>&1 || true; }
@@ -24,7 +27,11 @@ if [ $# -eq 0 ]; then
 fi
 
 echo "==> starting container as 101:101 on :$HOST_PORT"
-docker run -d --name "$CONTAINER" --user 101:101 -p "$HOST_PORT":8080 "$IMAGE" >/dev/null
+# --cap-drop/--security-opt mirror the chart's container securityContext, so a
+# capability the image quietly depends on fails here rather than at admission.
+docker run -d --name "$CONTAINER" --user 101:101 \
+  --cap-drop=ALL --security-opt=no-new-privileges \
+  -p "$HOST_PORT":8080 "$IMAGE" >/dev/null
 
 # nginx needs a moment to bind; poll rather than sleep a fixed guess.
 for _ in $(seq 1 30); do
