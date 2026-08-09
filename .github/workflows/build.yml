@@ -19,19 +19,11 @@ jobs:
   # requires. No registry login and no `packages: write`: this job must not be able to
   # publish anything, only to fail.
   #
-  # WHAT THIS GATE DOES AND DOES NOT DO — read it literally, it is asymmetric:
-  #
-  #   PUBLISH path (push to main, workflow_dispatch): BLOCKING. `build` declares
-  #   `needs: verify`, so a failed contract check aborts the run before the push step
-  #   and no image reaches ghcr.io. Nothing bypasses that short of editing this file.
-  #
-  #   MERGE path (pull_request): ADVISORY. This repo has no branch protection and none
-  #   is planned, so this check cannot be marked required and a human can merge a PR
-  #   whose check is red. The Testing Standard permits advisory only when it is
-  #   recorded "naming what is consequently not covered", so: NOT COVERED is a
-  #   Dockerfile that fails the contract landing on `main`. STILL COVERED is the
-  #   consequence of that landing — the merge's own publish run stops at `verify`,
-  #   publishes nothing, and the registry keeps serving the last good digest.
+  # This gate is asymmetric: BLOCKING on the publish path (`build` declares
+  # `needs: verify`), ADVISORY on the merge path (not marked required, so a red PR can
+  # be merged by hand). README.md § "What the contract check gates, and what it does
+  # not" is the canonical statement of both halves and of what is consequently not
+  # covered — do not restate it here, and do not describe this check as gating a merge.
   verify:
     runs-on: ubuntu-latest
     permissions:
@@ -48,6 +40,12 @@ jobs:
     # one. This only stops the PUBLISH job from pushing an image built from an unmerged
     # PR head; the digest-evidence path (workflow_dispatch on a branch) is unaffected.
     if: github.event_name != 'pull_request'
+    # `:latest` is a live pointer (see the tags: block) — two runs on the same ref
+    # finishing out of order would leave it on the older image with no signal. Queue
+    # rather than cancel: a superseded run still publishes a :<sha> tag worth having.
+    concurrency:
+      group: publish-${{ github.ref }}
+      cancel-in-progress: false
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -78,7 +76,12 @@ jobs:
           # unreviewed code, so it is gated to main. The immutable per-SHA tag stays
           # unconditional on purpose: it is what lets a branch dispatch still produce
           # published-digest evidence without touching the pointer anything consumes.
-          # An empty list entry on a non-main ref is dropped by build-push-action.
+          # An empty list entry on a non-main ref is dropped by build-push-action@v6,
+          # which is what makes the `|| ''` branch safe. That is v6 behaviour, not YAML
+          # semantics — confirmed empirically by run 31322434943 (dispatch on a branch:
+          # only the :<sha> tag was pushed, `:latest` did not move). Re-confirm it on a
+          # major-version bump; dependabot's github-actions updater is what will raise
+          # one, so this comment is the review point that bump lands on.
           tags: |
             ghcr.io/pumapumapumas/portfolio:${{ github.sha }}
             ${{ github.ref == 'refs/heads/main' && 'ghcr.io/pumapumapumas/portfolio:latest' || '' }}

@@ -14,15 +14,16 @@ portfolio/                                      # Static portfolio site — publ
 │
 ├── .github/
 │   ├── dependabot.yml                          # Owner for the Dockerfile's digest pin — the docker ecosystem
-│   │                                           #   opens a monthly PR moving the base tag and digest together,
+│   │                                           #   opens a weekly PR moving the base tag and digest together,
 │   │                                           #   so an immutable pin cannot silently age past its CVE patches.
 │   └── workflows/
 │       └── build.yml                           # Two jobs. `verify` runs testing/run-all.sh unfiltered on push,
 │                                               #   pull_request and dispatch; `build` needs it, so a failing
 │                                               #   contract check publishes nothing. Blocking on the publish
-│                                               #   path, advisory on the merge path (no branch protection —
-│                                               #   README states the carve-out). `:latest` only moves on main;
-│                                               #   the immutable :<sha> tag is published from any ref.
+│                                               #   path, advisory on the merge path (not marked required, by
+│                                               #   operator ruling — README is the canonical statement of both
+│                                               #   halves). `:latest` only moves on main, and publish runs are
+│                                               #   serialised per ref; the immutable :<sha> tag from any ref.
 │                                               #   Surfaces the published digest as a job output, on stdout,
 │                                               #   and in the step summary (Image Pipeline Standard §6.2).
 │

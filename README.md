@@ -51,16 +51,26 @@ difference is worth stating exactly rather than leaving to the job name:
 - **Publishing is gated.** The `build` job declares `needs: verify`, so a run whose
   contract check fails stops before the push step. An image that fails the check does
   not reach `ghcr.io`, and nothing short of editing the workflow changes that.
-- **Merging is not gated.** This repo has no branch protection and none is planned, so
-  the check cannot be marked required and a red pull request can still be merged by
-  hand. What that leaves uncovered: a `Dockerfile` that fails the contract can land on
-  `main`. What it does not leave uncovered: the merge's own run then fails at `verify`
-  and publishes nothing, so the registry keeps serving the last good digest and the
-  cluster never pulls the broken image.
+- **Merging is not gated, and will not be.** GitHub *can* mark this check required —
+  the operator has a standing ruling not to configure branch protection on any repo, so
+  it is not marked required here and a red pull request can still be merged by hand.
+  What that leaves uncovered: a `Dockerfile` that fails the contract can land on `main`.
+  What it does not leave uncovered: the merge's own run then fails at `verify` and
+  publishes nothing, so the registry keeps serving the last good digest and the cluster
+  never pulls the broken image.
 
-This is the advisory carve-out the [Testing Standard](/opt/skyy-net/mdc-master-planning/standards/development/testing/testing_standard.md)
-requires be written down rather than assumed — an undocumented advisory check is
-indistinguishable from an ungated control.
+Naming what is consequently not covered is what the
+[Testing Standard](/opt/skyy-net/mdc-master-planning/standards/development/testing/testing_standard.md)
+requires of any advisory check — an undocumented advisory check is indistinguishable
+from an ungated control — and the paragraph above is that record.
+
+**One precision, so a future audit is not misled.** The standard's advisory carve-out is
+written for a platform that *cannot* mark a check required; this one can, and the
+operator elected not to. So this is an operator-elected deviation that meets the
+disclosure the carve-out demands, not the carve-out itself. Whether the standard should
+admit a recorded election as a third basis is an open question, unruled, at
+[MDC-Master-Planning#150](https://github.com/helloskyy-io/MDC-Master-Planning/issues/150).
+Either ruling leaves this repo's posture and this disclosure unchanged.
 
 Every push to `main` publishes the image to `ghcr.io/pumapumapumas/portfolio`; the run's
 summary prints the published digest to pin in the deployment chart. The mutable

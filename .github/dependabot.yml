@@ -12,9 +12,14 @@ updates:
   - package-ecosystem: "docker"
     directory: "/"
     schedule:
-      interval: "monthly"
+      # Weekly, not monthly: shortening the window between an nginx CVE patch landing
+      # upstream and a PR existing for it is the entire job of this entry, and the site
+      # this image serves is public. Dependabot only opens a PR when the tag actually
+      # resolves to a new digest, so a quiet month stays quiet.
+      interval: "weekly"
 
   # Not the reason this file exists; included because it is free once the file is here.
+  # Monthly is right for it — an Actions bump is a review point, not a patch window.
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
