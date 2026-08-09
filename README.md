@@ -27,7 +27,18 @@ Or just open `index.html` in a browser.
 
 ```sh
 docker build -t portfolio .
-docker run --rm -p 8080:80 portfolio
+docker run --rm -p 8080:8080 portfolio
 ```
 
-Then expose it through the Cloudflare tunnel as a platform workload — your first self-hosted site.
+The image is built on `nginx-unprivileged`: it runs as uid 101 and serves on **:8080**, not
+:80. That is required — the cluster it deploys to enforces Pod Security Admission
+`restricted`, which rejects root containers, and a non-root process cannot bind :80.
+
+To check the image still satisfies that contract:
+
+```sh
+./test/verify-image.sh
+```
+
+Every push to `main` publishes the image to `ghcr.io/pumapumapumas/portfolio`; the run's
+summary prints the published digest to pin in the deployment chart.
