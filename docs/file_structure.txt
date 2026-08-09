@@ -13,13 +13,23 @@ portfolio/                                      # Static portfolio site — publ
 ├── projects.js                                 # The project data — each entry in `projects` renders one tile.
 │
 ├── .github/
+│   ├── dependabot.yml                          # Owner for the Dockerfile's digest pin — the docker ecosystem
+│   │                                           #   opens a monthly PR moving the base tag and digest together,
+│   │                                           #   so an immutable pin cannot silently age past its CVE patches.
 │   └── workflows/
-│       └── build.yml                           # Builds + pushes the image to ghcr.io on every push to main.
+│       └── build.yml                           # Two jobs. `verify` runs testing/run-all.sh unfiltered on push,
+│                                               #   pull_request and dispatch; `build` needs it, so a failing
+│                                               #   contract check publishes nothing. Blocking on the publish
+│                                               #   path, advisory on the merge path (no branch protection —
+│                                               #   README states the carve-out). `:latest` only moves on main;
+│                                               #   the immutable :<sha> tag is published from any ref.
 │                                               #   Surfaces the published digest as a job output, on stdout,
 │                                               #   and in the step summary (Image Pipeline Standard §6.2).
 │
 ├── testing/                                    # Tier-1 test location (Testing Standard, Multi-Repo Conventions)
-│   ├── run-all.sh                              # Master runner — globs verify-*.sh. All suites must be reachable here.
+│   ├── run-all.sh                              # Master runner — discovers every executable *.sh here except
+│   │                                           #   itself, and fails on an empty discovery. All suites must be
+│   │                                           #   reachable from here; a test outside discovery is a defect.
 │   └── verify-image.sh                         # Asserts the PSA-`restricted` image contract: non-root uid 101,
 │                                               #   listens :8080, serves this repo's real content.
 │

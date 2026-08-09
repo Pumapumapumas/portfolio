@@ -40,5 +40,30 @@ To check the image still satisfies that contract:
 ./testing/run-all.sh
 ```
 
+CI runs that same command as the `verify` job, on pushes, pull requests and manual
+dispatches alike.
+
+## What the contract check gates, and what it does not
+
+The check is **blocking on the publish path and advisory on the merge path**, and the
+difference is worth stating exactly rather than leaving to the job name:
+
+- **Publishing is gated.** The `build` job declares `needs: verify`, so a run whose
+  contract check fails stops before the push step. An image that fails the check does
+  not reach `ghcr.io`, and nothing short of editing the workflow changes that.
+- **Merging is not gated.** This repo has no branch protection and none is planned, so
+  the check cannot be marked required and a red pull request can still be merged by
+  hand. What that leaves uncovered: a `Dockerfile` that fails the contract can land on
+  `main`. What it does not leave uncovered: the merge's own run then fails at `verify`
+  and publishes nothing, so the registry keeps serving the last good digest and the
+  cluster never pulls the broken image.
+
+This is the advisory carve-out the [Testing Standard](/opt/skyy-net/mdc-master-planning/standards/development/testing/testing_standard.md)
+requires be written down rather than assumed — an undocumented advisory check is
+indistinguishable from an ungated control.
+
 Every push to `main` publishes the image to `ghcr.io/pumapumapumas/portfolio`; the run's
-summary prints the published digest to pin in the deployment chart.
+summary prints the published digest to pin in the deployment chart. The mutable
+`:latest` tag only ever moves on `main` — branch dispatches publish the immutable
+`:<sha>` tag alone, so getting a digest for review cannot repoint the tag the cluster's
+adopt path resolves.

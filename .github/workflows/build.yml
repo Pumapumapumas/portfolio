@@ -6,10 +6,48 @@ name: build-and-publish
 on:
   push:
     branches: [main]
+  # Deliberately unfiltered — no `paths:`, no `branches:` narrowing. The Testing
+  # Standard's "A gate's trigger MUST NOT be narrower than its runner's discovery"
+  # names a `paths:` filter, a changed-files guard and a job-level `if:` as the same
+  # violation in different syntax, so none of them appears on `verify` below.
+  pull_request:
   workflow_dispatch:
 
 jobs:
+  # The image contract control. `run-all.sh` discovers testing/verify-image.sh, which
+  # builds the image and asserts the three properties k3s-w1's PSA `restricted` stance
+  # requires. No registry login and no `packages: write`: this job must not be able to
+  # publish anything, only to fail.
+  #
+  # WHAT THIS GATE DOES AND DOES NOT DO — read it literally, it is asymmetric:
+  #
+  #   PUBLISH path (push to main, workflow_dispatch): BLOCKING. `build` declares
+  #   `needs: verify`, so a failed contract check aborts the run before the push step
+  #   and no image reaches ghcr.io. Nothing bypasses that short of editing this file.
+  #
+  #   MERGE path (pull_request): ADVISORY. This repo has no branch protection and none
+  #   is planned, so this check cannot be marked required and a human can merge a PR
+  #   whose check is red. The Testing Standard permits advisory only when it is
+  #   recorded "naming what is consequently not covered", so: NOT COVERED is a
+  #   Dockerfile that fails the contract landing on `main`. STILL COVERED is the
+  #   consequence of that landing — the merge's own publish run stops at `verify`,
+  #   publishes nothing, and the registry keeps serving the last good digest.
+  verify:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Verify the image contract
+        run: ./testing/run-all.sh
+
   build:
+    needs: verify
+    # NOT a filter on the control — `verify` still runs on every event, including this
+    # one. This only stops the PUBLISH job from pushing an image built from an unmerged
+    # PR head; the digest-evidence path (workflow_dispatch on a branch) is unaffected.
+    if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -34,9 +72,16 @@ jobs:
         with:
           context: .
           push: true
+          # `:latest` is the tag the chart's adopt path resolves by DEFAULT, and ArgoCD
+          # reconciles what it resolves onto a public site with prune+selfHeal. A
+          # workflow_dispatch from any branch would otherwise move that pointer to
+          # unreviewed code, so it is gated to main. The immutable per-SHA tag stays
+          # unconditional on purpose: it is what lets a branch dispatch still produce
+          # published-digest evidence without touching the pointer anything consumes.
+          # An empty list entry on a non-main ref is dropped by build-push-action.
           tags: |
-            ghcr.io/pumapumapumas/portfolio:latest
             ghcr.io/pumapumapumas/portfolio:${{ github.sha }}
+            ${{ github.ref == 'refs/heads/main' && 'ghcr.io/pumapumapumas/portfolio:latest' || '' }}
 
       - name: Surface published digest
         run: |

@@ -14,6 +14,8 @@ The image **must** run as non-root (uid 101) and listen on **:8080**. The `portf
 
 The `Dockerfile` header comment is the canonical explanation. `testing/verify-image.sh` is the mechanical check. Run `./testing/run-all.sh` after any change to the `Dockerfile`.
 
+CI runs the same check as the `verify` job. It **blocks publishing** — `build` declares `needs: verify`, so a failing image never reaches `ghcr.io`. It does **not** block merging: this repo has no branch protection, so a red pull request can still be merged by hand. `README.md` carries the full carve-out; do not describe the check as if it gated the merge.
+
 ## Content is operator-owned
 
 `index.html`, `style.css`, and `projects.js` are the operator's content. Do not edit them for infrastructure reasons — if a change to the container requires a content change, surface it rather than making it.
