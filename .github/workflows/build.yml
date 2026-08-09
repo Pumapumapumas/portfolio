@@ -40,6 +40,8 @@ jobs:
 
       - name: Surface published digest
         run: |
+          # stdout too, not just the summary — the log is what `gh run view --log` reads.
+          echo "published: ghcr.io/pumapumapumas/portfolio@${DIGEST}"
           echo "### Published image" >> "$GITHUB_STEP_SUMMARY"
           echo '```' >> "$GITHUB_STEP_SUMMARY"
           echo "ghcr.io/pumapumapumas/portfolio@${DIGEST}" >> "$GITHUB_STEP_SUMMARY"
