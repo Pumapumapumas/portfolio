@@ -1,0 +1,26 @@
+# The Dockerfile's base is pinned by digest (Image Pipeline Standard §4), which makes it
+# immutable BY DESIGN — and therefore unable to pick up the CVE patches that
+# nginx-unprivileged:1.27-alpine ships as new digests. Nothing else in this repo bumps
+# that pin, so without an owner the image's security posture freezes at the day it was
+# pinned and ages silently. Dependabot's docker updater understands the
+# `image:tag@sha256:...` form and opens a PR moving the tag and the digest together.
+#
+# Do not "simplify" the FROM line to a bare tag to make updates automatic — the pin is
+# the standard, and this file is how it stays current without giving it up.
+version: 2
+updates:
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      # Weekly, not monthly: shortening the window between an nginx CVE patch landing
+      # upstream and a PR existing for it is the entire job of this entry, and the site
+      # this image serves is public. Dependabot only opens a PR when the tag actually
+      # resolves to a new digest, so a quiet month stays quiet.
+      interval: "weekly"
+
+  # Not the reason this file exists; included because it is free once the file is here.
+  # Monthly is right for it — an Actions bump is a review point, not a patch window.
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"

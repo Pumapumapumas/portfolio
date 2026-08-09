@@ -6,14 +6,54 @@ name: build-and-publish
 on:
   push:
     branches: [main]
+  # Deliberately unfiltered — no `paths:`, no `branches:` narrowing. The Testing
+  # Standard's "A gate's trigger MUST NOT be narrower than its runner's discovery"
+  # names a `paths:` filter, a changed-files guard and a job-level `if:` as the same
+  # violation in different syntax, so none of them appears on `verify` below.
+  pull_request:
   workflow_dispatch:
 
 jobs:
+  # The image contract control. `run-all.sh` discovers testing/verify-image.sh, which
+  # builds the image and asserts the three properties k3s-w1's PSA `restricted` stance
+  # requires. No registry login and no `packages: write`: this job must not be able to
+  # publish anything, only to fail.
+  #
+  # This gate is asymmetric: BLOCKING on the publish path (`build` declares
+  # `needs: verify`), ADVISORY on the merge path (not marked required, so a red PR can
+  # be merged by hand). README.md § "What the contract check gates, and what it does
+  # not" is the canonical statement of both halves and of what is consequently not
+  # covered — do not restate it here, and do not describe this check as gating a merge.
+  verify:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Verify the image contract
+        run: ./testing/run-all.sh
+
   build:
+    needs: verify
+    # NOT a filter on the control — `verify` still runs on every event, including this
+    # one. This only stops the PUBLISH job from pushing an image built from an unmerged
+    # PR head; the digest-evidence path (workflow_dispatch on a branch) is unaffected.
+    if: github.event_name != 'pull_request'
+    # `:latest` is a live pointer (see the tags: block) — two runs on the same ref
+    # finishing out of order would leave it on the older image with no signal. Queue
+    # rather than cancel: a superseded run still publishes a :<sha> tag worth having.
+    concurrency:
+      group: publish-${{ github.ref }}
+      cancel-in-progress: false
     runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
+    outputs:
+      # Image Pipeline Standard §6.2 — the published digest is surfaced as workflow
+      # output so the consuming chart can digest-pin (§4) without a manual lookup.
+      image-digest: ${{ steps.build.outputs.digest }}
     steps:
       - uses: actions/checkout@v4
 
@@ -25,10 +65,41 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push
+        id: build
         uses: docker/build-push-action@v6
         with:
           context: .
           push: true
+          # `:latest` is the tag the chart's adopt path resolves by DEFAULT, and ArgoCD
+          # reconciles what it resolves onto a public site with prune+selfHeal. A
+          # workflow_dispatch from any branch would otherwise move that pointer to
+          # unreviewed code, so it is gated to main. The immutable per-SHA tag stays
+          # unconditional on purpose: it is what lets a branch dispatch still produce
+          # published-digest evidence without touching the pointer anything consumes.
+          # An empty list entry on a non-main ref is dropped by build-push-action@v6,
+          # which is what makes the `|| ''` branch safe. That is v6 behaviour, not YAML
+          # semantics — confirmed empirically by run 31322434943 (dispatch on a branch:
+          # only the :<sha> tag was pushed, `:latest` did not move). Re-confirm it on a
+          # major-version bump; dependabot's github-actions updater is what will raise
+          # one, so this comment is the review point that bump lands on.
           tags: |
-            ghcr.io/pumapumapumas/portfolio:latest
             ghcr.io/pumapumapumas/portfolio:${{ github.sha }}
+            ${{ github.ref == 'refs/heads/main' && 'ghcr.io/pumapumapumas/portfolio:latest' || '' }}
+
+      - name: Surface published digest
+        run: |
+          # An empty digest would print a bare `...@` that still exits 0 — and that is
+          # exactly the string a human copies into the chart's image.digest. Fail loudly.
+          if [ -z "${DIGEST}" ]; then
+            echo "::error::build step produced no image digest — nothing to pin"
+            exit 1
+          fi
+          # stdout too, not just the summary — the log is what `gh run view --log` reads.
+          echo "published: ghcr.io/pumapumapumas/portfolio@${DIGEST}"
+          echo "### Published image" >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          echo "ghcr.io/pumapumapumas/portfolio@${DIGEST}" >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          echo "Pin this digest in the chart's image.digest (Image Pipeline Standard §4)." >> "$GITHUB_STEP_SUMMARY"
+        env:
+          DIGEST: ${{ steps.build.outputs.digest }}
