@@ -57,6 +57,20 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
+      # Provenance travels WITH the image, not beside it. The consuming desired-state
+      # pins a bare digest; any human annotation naming the source commit next to that
+      # digest is a hand-maintained duplicate of machine state, and it went stale on
+      # both of the first two adoptions -- the adopt workflow replaces the digest VALUE
+      # and cannot know about the prose. These OCI annotations
+      # (org.opencontainers.image.revision / .source / .created) are the standard answer:
+      # `docker buildx imagetools inspect <ref>` resolves a digest back to its commit
+      # with no second copy to keep in sync.
+      - name: Derive OCI provenance labels
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/pumapumapumas/portfolio
+
       - name: Log in to GHCR
         uses: docker/login-action@v4
         with:
@@ -85,6 +99,7 @@ jobs:
           tags: |
             ghcr.io/pumapumapumas/portfolio:${{ github.sha }}
             ${{ github.ref == 'refs/heads/main' && 'ghcr.io/pumapumapumas/portfolio:latest' || '' }}
+          labels: ${{ steps.meta.outputs.labels }}
 
       - name: Surface published digest
         run: |
