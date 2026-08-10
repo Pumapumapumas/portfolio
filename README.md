@@ -51,9 +51,14 @@ difference is worth stating exactly rather than leaving to the job name:
 - **Publishing is gated.** The `build` job declares `needs: verify`, so a run whose
   contract check fails stops before the push step. An image that fails the check does
   not reach `ghcr.io`, and nothing short of editing the workflow changes that.
-- **Merging is not gated, and will not be.** GitHub *can* mark this check required —
-  the operator has a standing ruling not to configure branch protection on any repo, so
-  it is not marked required here and a red pull request can still be merged by hand.
+- **GitHub's merge button is not gated, and will not be.** GitHub *can* mark this check
+  required — the operator has a standing ruling not to configure branch protection on any
+  repo, so it is not marked required here and a red pull request can still be merged by hand.
+- **The dispatch pipeline IS gated, by a different mechanism.** `testing/check-policy.yaml`
+  declares `verify` blocking, and a dispatch that would otherwise emit a merge verdict stops
+  while it is red. That reaches the property branch protection would have bought, without the
+  paid plan the standing ruling declines. It binds runs that go through the pipeline — it
+  does not, and cannot, stop a human pressing the button.
   What that leaves uncovered: a `Dockerfile` that fails the contract can land on `main`.
   What it does not leave uncovered: the merge's own run then fails at `verify` and
   publishes nothing, so the registry keeps serving the last good digest and the cluster

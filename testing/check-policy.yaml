@@ -1,0 +1,25 @@
+# Which of this repo's CI checks gate a merge, and which do not.
+#
+# Required by the Testing Standard § The declaration is machine-readable, not
+# prose. README.md § "What the contract check gates, and what it does not" is the
+# narrative version and the two MUST agree -- this file is the machine-readable
+# one, and it is what a consumer reads.
+#
+# NAMES ARE THE REPORTED CHECK NAME, VERBATIM -- what `gh pr checks` prints, i.e.
+# the JOB id, not the workflow name.
+
+blocking:
+  # The image contract control: non-root uid 101, serves :8080, real content --
+  # the three properties k3s-w1's PSA `restricted` stance requires. Unfiltered by
+  # design (no `paths:`, no changed-files guard, no job-level `if:`), so a verdict
+  # exists on every PR. Nothing else catches this class: a Dockerfile that breaks
+  # any of the three admits nowhere and the failure surfaces as a pod that will
+  # not start, long after review.
+  - verify
+
+# `build` is deliberately absent rather than advisory. It carries
+# `if: github.event_name != 'pull_request'`, so it never appears in a PR's check
+# list -- it is the publish action, not a detector, and its failure means "no
+# image was pushed", which is immediate and self-evident. An advisory entry must
+# name an uncovered class; this one has none to name.
+advisory: []
