@@ -2,7 +2,7 @@
 
 A **static site** — vanilla HTML/CSS/JS, no build step, no framework — that publishes its own container image to `ghcr.io/pumapumapumas/portfolio` and runs as a workload on `k3s-w1`.
 
-**All MDC platform standards live in `mdc-master-planning`.** This file references them by absolute path. Do not duplicate a standard here — always link to the canonical copy.
+**All MDC platform standards live in `mdc-master-planning`.** This file references them by absolute path. Do not duplicate a standard here — always link to the canonical copy. **One exception:** the **Research Standard** is *vendored* (a verbatim MIRROR) at `docs/standards/research/`, because the V2 research workflow reads the artifact contract from inside the target repo and stops if it can't find one — so an in-repo copy is the robust form of adoption (the same reason CDF vendors it). See the Standards section.
 
 ## Repo structure
 
@@ -24,7 +24,7 @@ CI runs the same check as the `verify` job. It **blocks publishing** — `build`
 
 - **The Helm chart that deploys this image** — `skyy-command/deployments/workload/portfolio/chart/`
 - **Per-cluster values** — `desired-state-sturdy-wheat-pelican/container/k3s-w1/workload/portfolio/`
-- **Standards** — `mdc-master-planning/standards/`
+- **Standards** — `mdc-master-planning/standards/` (referenced by path). *Exception:* the **Research Standard** is vendored in-repo at `docs/standards/research/` (verbatim MIRROR) because the research workflow requires it locally.
 
 ## Standards (read when triggered)
 
@@ -37,5 +37,7 @@ Each entry tells you **when to read the standard**. Do not pull every standard i
 - **[Testing Standard](/opt/skyy-net/mdc-master-planning/standards/development/testing/testing_standard.md)** — **read when** adding a check. Tests live under `testing/` (the Multi-Repo Conventions shape for small repos) and MUST be reachable from `testing/run-all.sh` — a test outside runner discovery is a defect, not a convenience gap.
 
 - **[Documentation Standard](/opt/skyy-net/mdc-master-planning/standards/documentation/documentation_standard.md)** — **read when** adding, removing, or renaming files (refresh `docs/file_structure.txt`), or revising this file.
+
+- **[Research Standard](./docs/standards/research/research_standard.md)** *(VENDORED — verbatim MIRROR of mdc's `standards/development/research/research_standard.md`; do not edit the copy, amend upstream then re-vendor)* — **read when** running or interpreting the V2 research workflow, or adding to a research pool. Pools live under [`docs/standards/architecture/research/`](./docs/standards/architecture/research/) (product level — findings that could change *what the portfolio is*). Research is **EVIDENCE, never binding**. **Breaking it looks like:** editing the vendored copy locally, or treating a research finding as a decision without human codification.
 
 > **Not listed** per the [CLAUDE.md governance rule](/opt/skyy-net/mdc-master-planning/standards/documentation/documentation_standard.md): Temporal, Ansible, Persistent Storage, Networking, and K8s Deployment standards. This repo contains no Temporal workflow code, no Ansible, no chart code, and declares no cluster networking — the chart that does lives in `skyy-command` and is governed by that repo's CLAUDE.md.
