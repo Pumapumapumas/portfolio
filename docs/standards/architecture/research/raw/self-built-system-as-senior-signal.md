@@ -19,14 +19,38 @@ Confidence:     Definitive on what published seniority frameworks SAY (§3) — 
                 cited sources, not findings anyone published. Unverified→DECLINED on the
                 homelab discount itself (§5.4, Gap G1): no credible primary source was found
                 and none is cited. Gaps G1–G9 in §13.
-Critic:         not-yet-verified — 2026-08-10
+Critic:         PASS-WITH-FIXES — 2026-08-10. Adversarial check found no fabricated source and
+                no misattribution. The three hiring studies carrying the argument ([S11] Botelho
+                & Chang, [S12] Kacperczyk & Younkin, [S13] Rivera) reproduce correctly down to
+                sample sizes and percentages. Four of the five seniority artifacts (§2) were
+                re-verified span-by-span by cloning their repositories and grepping the
+                first-party sources — `dropbox/dbx-career-framework`,
+                `gitlab-com/content-sites/handbook`, `jorgef/engineeringladders`,
+                `lethain/staff-eng`; SFIA 9 has no repository to clone and was verified by direct
+                fetch of the two cited level pages under the §14 normalisations. The chief repair
+                was one quotation that had silently absorbed a word from the following sentence
+                ([S13], §5.2), alongside inaccuracies in the paper's own verification apparatus —
+                a PDF-quotation tally that did not add up, a byte-check claim about apostrophes
+                that was false of this file, a quoted [S14] table cell the discipline note said
+                did not exist, an under-declared extraction method, and two wrong
+                retrieval-failure diagnoses ([S19] HBS, [S11]/[S12] INFORMS) — plus one framework
+                claim stated as universal that [S7] falsifies, now scoped (§3.6) with its
+                consequences traced through §4.3 and §11. Several smaller fixes are not itemised
+                here: an artifact count in §2, the [S1] used-for cell, two truncated quotations
+                (§7 D8, §11), an on-trigger SFIA 10 clause in the volatility map, and the §10.5
+                C5 row. Confidence marking was checked and left unchanged.
 ```
 
 **Volatility map (Research Standard §3, mixed-volatility rule).** The header carries the
 highest tier present. A refresh may **skip** §§2, 3, 4, 7, 8, 11 (Low — the seniority frameworks
 are stable published artifacts: SFIA 9 is the current standard, the Dropbox framework's public
 repo dates from 2021, the GitLab pages were last modified 2026-03-12, StaffEng's guides are the
-2021 book's companion text; the credibility and vocabulary derivations rest on those). A refresh
+2021 book's companion text; the credibility and vocabulary derivations rest on those), **with one
+on-trigger exception that overrides the tier: `sfia-online.org` listed "SFIA 9 - the current
+version" alongside "SFIA 10 - in consultation" when checked on 2026-08-10, and its `/en/sfia-10`
+page is headed "Consultation on changes to the SFIA framework". §3.1 quotes SFIA 9 level text
+verbatim, so re-verify §3.1 against the current version on SFIA 10 release, regardless of tier —
+otherwise a skipped §3 silently leaves the paper quoting a prior version.** A refresh
 **must** re-examine §5 (the hiring-evaluation evidence and whether newer audit studies exist),
 §9 (the non-traditional-background read, which is the fastest-moving claim in the paper), §12
 (boundary analysis) and §13 (gaps). That is roughly a third of the paper, which is why this is
@@ -131,8 +155,9 @@ that is expensive to fake and cheap to check.**
 
 ## 2. The landscape of published seniority definitions — what exists
 
-Four kinds of first-party documented artifact define engineering seniority publicly. All four
-were fetched and quoted directly for this paper.
+Four kinds of first-party documented artifact define engineering seniority publicly, and this
+paper uses **five artifacts across those four kinds** — the table below has five rows. **All five
+were fetched and quoted directly for this paper.**
 
 | Kind | Instance used | Authority | Why it is here |
 |---|---|---|---|
@@ -290,14 +315,17 @@ And the sentence that no framing device can route around [S8]:
 > your impact, and the organization's recognition of all those things.
 
 *(Definitive as StaffEng's stated position; directional as a claim about the industry. Quoted
-verbatim; the apostrophes are U+2019 in the source and are reproduced as such.)*
+verbatim, with the two normalisations §14 names: the rendered page serves the apostrophes as
+`&rsquo;` (U+2019) and they are reproduced here as ASCII `'`; the span is character-exact against
+the first-party Markdown source, `lethain/staff-eng` → `content/guides/staff-archetypes.md`,
+where the apostrophe is ASCII and the sentence is split across two source lines.)*
 
 Larson also notes, of the Architect archetype, that the title "has fallen out of style in many
 companies, but the Architect role remains alive and well for folks operating at Staff-plus
 levels" [S8] — relevant to §11's vocabulary rulings, since "Software architect" is the subject's
 current self-title.
 
-### 3.6 What the four agree on — derived
+### 3.6 What the frameworks agree on — and the one place they do not — derived
 
 **Derived from [S1][S2][S3][S5][S6][S7][S8][S9].** Across a vendor-neutral standards framework,
 two employer ladders, one community framework, and the leading practitioner synthesis, the axes
@@ -312,11 +340,36 @@ that separate levels are consistently:
 5. **Organisational reach** — self → team → multiple teams → company → community.
 6. **Recognition by the organisation** — [S8] makes it constitutive, not incidental.
 
-**Technical depth is not on the list as a level discriminator.** All four frameworks treat depth
-as saturating early; every one of them distinguishes senior from staff on *reach and horizon*.
-That is the single most important structural fact for this positioning problem, and it cuts
-both ways: it means "he knows a lot of technologies" is not a seniority argument, and it means
-"he owns a multi-year platform under real consequence" is.
+**Technical depth is not what separates the senior band from the staff band — in the sources that
+have a staff band.** Stated precisely, because the universal form is false against this paper's
+own citations:
+
+- **In every source that NAMES Staff, the senior→staff delta is reach and horizon, not depth.**
+  [S2]/[S3] Dropbox IC4→IC5 (annual→multi-year, one team→multi-team); [S5]/[S6] GitLab
+  Senior→Staff (team-context delivery → technical leader for the team's domains, plus
+  cross-organisation verbs); [S8] StaffEng (organisational recognition as constitutive).
+- **[S1] SFIA has no "Staff" level** — the word does not appear in its levels-of-responsibility
+  text — so the analogous delta is **L5 → L6**, and there it is again reach and horizon
+  (organisational strategy, business plans, delegation of operational objectives).
+- **[S7] engineeringladders is the genuine exception and must be stated as one.** It has **no
+  Staff level at all** (Developer D1–D7, with `Senior: Yes` from level 4), and it carries a
+  **dedicated five-level Technology axis that does not saturate** — its level 4, labelled
+  **Masters**, is "very deep knowledge about the whole technology stack of the system", and its
+  level 5, labelled **Creates**, is "designs and creates new technologies that are widely used
+  either by internal or external teams" [S7]. *(Each quoted clause is the post-colon text of its
+  line in the raw `README.md` and is contiguous there; the source prints the level name as a
+  Markdown-emphasised label — `4. **Masters**: …` — so the labels are placed outside the
+  quotation marks rather than silently stripped of their `**`, per §14's no-third-normalisation
+  rule. §3.4's blockquotes from the same file keep the `**` because they reproduce whole
+  lines.)* In that framework, seniority is separated on
+  System/Influence **while an independent depth axis keeps climbing**.
+
+**The positioning consequence survives the narrowing, and is the single most important structural
+fact for this problem:** on every framework here, *reach and horizon* are what the senior band is
+argued on, and on none of them does breadth-of-tools do that work. So "he knows a lot of
+technologies" is still not a seniority argument — note that even [S7]'s depth axis rewards *depth
+on one system*, which a tag list evidences no better than it evidences reach — and "he owns a
+multi-year platform under real consequence" still is.
 
 ---
 
@@ -363,6 +416,15 @@ production platform can evidence:
 - **Nothing at all on organisational reach, delegation, mentorship, or recognition** — four to
   six of the criteria the same frameworks use to separate Senior from Staff.
 
+**The ceiling is unchanged by §3.6's exception, and here is why it survives the check.** [S7]'s
+Technology axis is a depth axis that does not saturate, and a solo operator *can* climb it — its
+level 4 is "very deep knowledge about the whole technology stack of the system", which is a
+description of an owner-operator. But the ceiling above is not set by what depth is unavailable;
+it is set by the **organisational** criteria in §4.2, which are uninstantiable regardless of how
+much depth is evidenced. A depth axis that a solo operator can climb **adds to the first bullet
+and takes nothing off the second** — and it is a reason to show depth on *this* system rather
+than breadth across tools (§11's tag-list ruling).
+
 **Therefore the defensible claim is a compound one, and it must be compound to survive a
 check:** *architectural scope and operational ownership at a level published ladders describe
 at Staff, evidenced without the organisational scope those ladders also require.* Stating the
@@ -370,9 +432,9 @@ missing half is not a weakness in the pitch. It is the thing that makes the stat
 believable — and §7 explains why in signalling terms.
 
 **A bare "staff-level" or "principal-level" self-label is not supported by this evidence and
-should not appear on the page.** A reader holding any of the four frameworks in §3 can falsify
-it in one step, and a falsified claim damages every neighbouring claim [S15, guideline 1's
-inverse].
+should not appear on the page.** A reader holding any of the §3 artifacts that names a Staff
+level ([S2]/[S3], [S5]/[S6], [S8]) can falsify it in one step, and a falsified claim damages
+every neighbouring claim [S15, guideline 1's inverse].
 
 ---
 
@@ -391,10 +453,10 @@ published abstract [S11]:
 
 *(Definitive as a description of the study's reported findings. Method: field experiment,
 n=2,400 job postings, software engineering roles, US. Retrieved from the RePEc/IDEAS record,
-which reproduces the publisher's abstract verbatim — the INFORMS publisher page returned an
-empty body to a direct fetch (§13, G6), so the retrieval host is a secondary one and this is
-noted rather than hidden. Funder: not stated in the abstract; the authors are academics at Yale
-SOM.)*
+which reproduces the publisher's abstract verbatim — the INFORMS publisher page returns an HTTP
+403 bot-mitigation response to a direct fetch (§13, G6), so the retrieval host is a secondary one
+and this is noted rather than hidden. Funder: not stated in the abstract; the authors are
+academics at Yale SOM.)*
 
 Two details matter more than the headline. **The penalty is greatest for successful founders** —
 which rules out "they think you failed" as the mechanism. And it **is driven by older hiring
@@ -436,12 +498,15 @@ And from the findings [S13]:
 
 > Evaluators described fit as being one of the three most important criteria they used to assess
 > candidates in job interviews; more than half reported it was the most important criterion at
-> the job interview stage, rating fit over analytical thinking and communication skills.
+> the job interview stage, rating fit over analytical thinking and communication.
 
 *(Definitive as a description of what Rivera reports. **Scope limit, stated plainly: this is
 elite professional services, not software engineering.** The transfer to software hiring is
 *derived*, not demonstrated, and a reader should discount it accordingly. Quoted from the
-ASA-hosted PDF; PDF-derived spans were checked for extraction artifacts before quoting, §14.)*
+ASA-hosted PDF; PDF-derived spans were checked for extraction artifacts before quoting, §14. The
+second span ends where the source sentence ends — the source places footnote marker `13`
+immediately after "communication", and the marker is dropped without an ellipsis because it is
+not part of the sentence.)*
 
 Rivera also reports an evaluator at one law firm explaining that they take a pass on candidates
 who show a strong passion for something outside work, because it signals a poor fit with that
@@ -527,8 +592,9 @@ text it is inferred from, so a critic can check the inference rather than the as
 Sackett, Zhang, Berry & Lievens (2022), *Journal of Applied Psychology* — a systematic revision
 of meta-analytic validity estimates in personnel selection, correcting for systematic
 overcorrection for range restriction. Their revised table entry for **work sample tests** draws
-on Roth et al. (2005), k=54 studies, N=10,469, and reports an operational validity of **.33**,
-noting that meta-analysis "rightly makes no correction" for range restriction [S14].
+on Roth et al. (2005), k=54 studies, N=10,469, and reports an operational validity of **.33**;
+the table's range-restriction column records that this meta-analysis rightly makes no such
+correction [S14].
 
 *(Definitive as a description of the paper's reported estimate. PDF-derived — **paraphrased, not
 quoted**, because the text layer mangles punctuation; the .33 figure and the k/N values were
@@ -639,8 +705,8 @@ live URL for anything claimed to be running; a repository link for anything clai
 a working contact affordance.
 
 **D8 — Continuous, dated history.** *(Definitive as to the study's finding [S10]: a history of
-effort over time "would be extremely costly to fake.")* Dated milestones over 2025–26 turn a
-snapshot into a trace.
+effort over time "would be extremely costly to fake, making it a more reliable indicator of
+investment".)* Dated milestones over 2025–26 turn a snapshot into a trace.
 
 **D9 — Real users with recourse.** *(Derived from [S3]'s "significant consequences of failure"
 and §5.1's fit-and-commitment mechanism.)* The strongest available answer to "would he survive
@@ -739,9 +805,10 @@ exists, and it points one way. Stating this softly would be the dishonest move.
   *Hidden Workers: Untapped Talent* project page states that hiring processes "are designed to
   find 'perfect' candidates in an efficient manner, but in doing so systematically exclude
   several categories of qualified workers" [S19]. *(Directional and low-specificity: this is the
-  first-party project landing page. **The full report PDF was not retrievable** — the linked path
-  returned 404 and the download link is JS-injected; see §13, G5. The categories the report
-  enumerates and its methodology are therefore NOT cited here.)*
+  first-party project landing page. **Nothing from the report itself is used here** — the
+  documented PDF path returns 404, and the page's own download link resolves to a signed
+  Contentful asset that must be re-read from the page HTML on each attempt; see §13, G5. The
+  categories the report enumerates and its methodology are NOT cited here.)*
 
 **Derived synthesis — the strategic consequence, and it is the most important paragraph in §9:**
 the portfolio is the wrong instrument for the screen and the right instrument for everything
@@ -872,7 +939,7 @@ measurement window; the word "enterprise-grade."
 | C2 | `projects.js`: **"An enterprise-grade private cloud"** | **Drop or evidence** | "Enterprise-grade" is an unfalsifiable category claim [S10, conventional signal]. Replace with two demonstrated properties (e.g. the PSA `restricted` constraint, digest-pinned base images, the SLO) |
 | C3 | `projects.js`: **"designed and built from scratch"**, **"foundation-up"** | **Weaken to one instance** | Reads as effort, not judgement. "From scratch" is also the phrase most associated with hobby framing [derived, §5.5]. Keep "designed, built and operate"; drop the rest |
 | C4 | Hero: **"self-hosted private cloud"** | **Reframe** | See §11 vocabulary. "Self-hosted" is accurate and slightly hobbyist; "that I operate" carries the ownership claim [S7] without the connotation |
-| C5 | Three `Write-up →` links, all `href="#"` | **Blocking** | A promised artifact that does not exist is a verifiability failure [S15 guideline 1] and, worse, it is where an interested reader goes to convert interest into conviction. Either ship one write-up or remove the affordance |
+| C5 | Three `Write-up` links, each declared in `projects.js` as `{ label: "Write-up", href: "#" }` (a JS property, rendered into the `href` attribute at `projects.js:48`) | **Blocking** | A promised artifact that does not exist is a verifiability failure [S15 guideline 1] and, worse, it is where an interested reader goes to convert interest into conviction. Either ship one write-up or remove the affordance |
 | C6 | Tag arrays (`K3s`, `Temporal`, `Django`, `Ceph`, `ArgoCD`, `Ansible`) | **Keep, demote** | Pure conventional signal [S10]; useful for scanning, worthless as evidence. They must not be the densest information on the card |
 | C7 | Footer: **"built & self-hosted on my own cloud"** | **Keep — it is the best line on the current site** | It is a self-demonstrating claim: the page you are reading is the evidence. Cheapest assessment signal on the site [S10] |
 | C8 | Placeholder tile **"Add your next project"** | **Remove before any external reader sees it** | It exposes the page as unfinished, which [S15]'s guideline set treats as a credibility hazard |
@@ -916,7 +983,7 @@ are inferences with named inputs, and a human should rule on them.
 | **"I designed, built, and operate"** | **Earns — the key upgrade** | *Operate* is the verb in System axis 3: "owns the production operation and monitoring of the system" [S7] | — |
 | **"from scratch" / "foundation-up"** | Weak; use at most once | Signals effort, not judgement; strongly associated with the hobby reading [derived] | "end to end", or state the scope boundary instead |
 | **"self-hosted"** | Neutral-to-hobbyist | Describes where it runs, not who is accountable | "self-operated"; "that I operate" |
-| **"architect" (as self-title)** | Acceptable, with an artifact | [S8]: the Architect title "has fallen out of style in many companies, but the Architect role remains alive and well." The title is only as good as the linked decision record | Keep the title; link the ADRs |
+| **"architect" (as self-title)** | Acceptable, with an artifact | [S8]: the Architect title "has fallen out of style in many companies, but the Architect role remains alive and well for folks operating at Staff-plus levels". The title is only as good as the linked decision record | Keep the title; link the ADRs |
 | **"scalable" / "highly available" / "bulletproof"** | **Forfeit** | Adjectives with no instrument [S10] | An SLO and a number [S17] |
 | **"staff-level" / "principal-level"** (self-applied) | **Never** | Falsifiable in one step against §3's frameworks; §4.3 | Let the evidence imply the level |
 | **A bare stack/tag list** | Keep, demote | Conventional signal [S10]; useful for scanning only | Put the boundary rationale next to it |
@@ -1029,13 +1096,26 @@ Each states what was looked for, how, and what was concluded. None is filled wit
   **Method:** not searched exhaustively — this was out of the dispatch's scope and is recorded so
   a later cycle knows it is open, not settled.
 
-- **G5 — The HBS *Hidden Workers* report itself was not retrieved.** The project landing page was
-  fetched and is cited [S19]; the report PDF at the documented path returned 404 and the download
-  link on the page is JS-injected. **No figure, category list, or methodology detail from the
-  report is cited.** A refresh should retrieve the PDF before relying on it.
+- **G5 — Nothing from the HBS *Hidden Workers* report itself is used; the retrieval route is now
+  recorded.** The project landing page was fetched and is cited [S19]. **The documented path
+  `https://www.hbs.edu/managing-the-future-of-work/Documents/research/hiddenworkers09032021.pdf`
+  returns HTTP 404** (re-checked 2026-08-10). The download link is **not** JS-injected — it is
+  present in the served HTML of a plain `curl` and resolves to a Contentful asset,
+  `https://assets.secure.ctfassets.net/beh2ph2tgbqk/2o4INbCgmeRvTyiLI7qCxl/4f66c1edb0c975113c065c69e5608c22/hiddenworkers09032021.pdf`,
+  which **returns HTTP 403 (`{"sys":{"type":"Error","id":"Forbidden"}}`) when fetched without the
+  `token` and `policy` query parameters the page's own link carries**. With those parameters the
+  asset returns **HTTP 200, `application/pdf`, 7,940,170 bytes** (verified 2026-08-10); the policy
+  JWT carries an `exp` roughly two days out, so **the signed URL must be re-read from the landing
+  page HTML on each attempt** — a copied URL will expire. **No figure, category list, or
+  methodology detail from the report is cited in this paper**, and none was read into it: the
+  route was established while repairing this gap statement, after the paper's claims were
+  written. A refresh that wants report specifics can now fetch it by that route and must cite it
+  as newly-read material.
 
 - **G6 — Two publisher pages were unreachable.** Direct fetches of the INFORMS DOI pages for
-  [S11] and [S12] returned empty bodies (bot mitigation). The abstracts quoted are the publisher's
+  [S11] and [S12] return **HTTP 403 bot-mitigation responses** (a 5,512-byte interstitial from
+  the CDN in front of `pubsonline.informs.org`, titled `Just a moment...`, re-checked 2026-08-10
+  — not empty bodies). The abstracts quoted are the publisher's
   text as reproduced by RePEc/IDEAS, and the [S12] accepted manuscript is additionally hosted by
   LBS Research Online. This is a retrieval-host caveat, not a content doubt — but a critic should
   know the primary host was not the one that answered.
@@ -1057,30 +1137,62 @@ Each states what was looked for, how, and what was concluded. None is filled wit
 ## 14. Citations
 
 **Quotation discipline used in this paper.** Every span presented as a quotation was returned as
-exact characters by a direct `curl` fetch of the source URL. HTML sources were converted with a
-local tag-stripping parser; **runs of whitespace are normalised to a single space and nothing
-else is altered** (tag boundaries in the source occasionally produce doubled spaces mid-sentence
-— e.g. the SFIA Level 5 *Influence* text — and those are the only characters affected).
-Typographic apostrophes are U+2019 in [S8] and [S6] and are reproduced as such; this was
-byte-checked. **PDF sources ([S10], [S13], [S14]) have text layers that mangle punctuation,
-spacing and typographic quotes**, so the default for them is **paraphrase, explicitly labelled**.
-Four spans from PDFs are presented as quotations, and only because each was verified by literal
-substring match against the extracted characters and inspected for extraction artifacts before
-being quoted: three from [S10] (§1, §5.3 ×2) and two from [S13] (§5.2) — the [S13] spans are from
-the abstract and findings text and contain no hyphenation or MacRoman artifacts. **Every
-[S14]-derived statement is a paraphrase.** No claim in this paper is sourced to a search-engine
-result summary; searches were used only to locate sources, which were then fetched. Where a
-publisher page was unreachable, the retrieval host is named in the table (§13, G6).
+exact characters by a direct `curl` fetch of the source URL, subject to the **two normalisations
+named here and no others**.
+
+*Normalisation 1 — whitespace.* HTML sources were converted with a local tag-stripping parser;
+**runs of whitespace are normalised to a single space** (tag boundaries in the source
+occasionally produce doubled spaces mid-sentence — e.g. the SFIA Level 5 *Influence* text), and
+source line breaks inside a sentence become spaces.
+
+*Normalisation 2 — typographic apostrophes.* **Spans taken from rendered pages had their
+typographic apostrophes (U+2019, served either raw or as `&rsquo;`) normalised to ASCII `'`.**
+**No quotation in this paper reproduces U+2019 — every apostrophe inside a quoted span is ASCII
+U+0027**, and the only U+2019 characters in this file are the three source strings printed in
+this paragraph, shown to display what each source actually serves. The affected span families are
+[S8] (`organization&rsquo;s recognition` on staffeng.com), [S6] (`team’s domains` on
+handbook.gitlab.com), [S1] (`organisation’s overall` on sfia-online.org, §3.1) and [S11]
+(`candidate’s founder experience` in the RePEc-reproduced abstract, §5.1). The [S6] and [S8]
+spans were **additionally confirmed character-exact against the first-party Markdown sources**,
+where the apostrophe is ASCII U+0027: `gitlab-com/content-sites/handbook` →
+`assets/includes/engineering-careers/staff-leadership-competency.md`,
+`senior-leadership-competency.md`, `senior-technical-competency.md`; `lethain/staff-eng` →
+`content/guides/staff-archetypes.md`. No quotation's meaning is affected by either
+normalisation.
+
+*PDF sources.* **[S10], [S13] and [S14] have text layers that mangle punctuation, spacing and
+typographic quotes**, so the default for them is **paraphrase, explicitly labelled**. **Five
+spans from PDFs are presented as quotations** — enumerated rather than totalled: §1 [S10]
+(assessment vs conventional signals), §5.2 [S13] (the abstract span), §5.2 [S13] (the fit-ranking
+span), §5.3 [S10] (free time / initiative), §5.3 [S10] (costly to fake) — three from [S10] and
+two from [S13], five items. Each was re-verified on 2026-08-10 by a **whitespace-insensitive
+substring match**: text was extracted by zlib-inflating the PDF content streams and **joining
+their string literals with a single space** (`b' '.join`, not bare concatenation — the separator
+is named because it changes what the intermediate text looks like), then **all whitespace was
+removed from both the extracted text and the quoted span** before matching. The separator cannot
+change a match outcome, since whitespace is stripped from both sides before comparison; it is
+stated so a checker reproduces the same intermediate text. Whitespace-insensitivity is required,
+not convenient: these text layers split glyphs with kerning whitespace — under this method
+[S10]'s own title line extracts as `A c tivity  T ra c e s  a nd  S igna ls` and Rivera's running
+head as `A m e r i c a n   S o c i o l o g i c a l` — so a literal space-preserving match fails
+on text that is present. All five matched; each was also inspected for hyphenation and MacRoman
+artifacts before being quoted. **Every [S14]-derived
+statement is a paraphrase**, including the range-restriction note in §5.6, whose source is a
+table cell reading `Rightly makes no correction`.
+
+No claim in this paper is sourced to a search-engine result summary; searches were used only to
+locate sources, which were then fetched. Where a publisher page was unreachable, the retrieval
+host is named in the table (§13, G6).
 
 | # | Source | Type | Used for |
 |---|---|---|---|
-| S1 | SFIA Foundation. *SFIA 9 — Levels of responsibility*, Level 5 and Level 6. https://sfia-online.org/en/sfia-9/responsibilities/level-5 · https://sfia-online.org/en/sfia-9/responsibilities/level-6 | First-party framework, current published version | Autonomy / Influence / Complexity / Knowledge attributes at L5 and L6; the delegation clause; level names |
+| S1 | SFIA Foundation. *SFIA 9 — Levels of responsibility*, Level 5 and Level 6. https://sfia-online.org/en/sfia-9/responsibilities/level-5 · https://sfia-online.org/en/sfia-9/responsibilities/level-6 | First-party framework, current published version | Autonomy / Influence / Complexity attributes at L5 and L6; the delegation clause; level names; the absence of a "Staff" level |
 | S2 | Dropbox, Inc. *Engineering Career Framework — IC4 Software Engineer.* https://raw.githubusercontent.com/dropbox/dbx-career-framework/main/docs/ic4_software_engineer.html | First-party employer ladder (raw repo HTML, Apache-2.0) | IC4 scope statement; ambiguity clause; mentorship lever |
 | S3 | Dropbox, Inc. *Engineering Career Framework — IC5 Staff Software Engineer.* https://raw.githubusercontent.com/dropbox/dbx-career-framework/main/docs/ic5_staff_software_engineer.html | First-party employer ladder (raw repo HTML) | The Staff scope statement; "multi-year, multi-team"; "significant consequences of failure"; "defining both the what and how" |
 | S4 | Dropbox, Inc. *dbx-career-framework* repo README + GitHub git-tree API (`.../git/trees/main?recursive=1`). https://github.com/dropbox/dbx-career-framework | First-party repo + authoritative API enumeration | The seven-page SWE track, **enumerated and listed** in §3.2 rather than asserted as a total; default branch `main` |
 | S5 | GitLab. *Engineering Career Framework: Senior.* https://handbook.gitlab.com/handbook/engineering/careers/matrix/senior/ | First-party public handbook (last modified 2026-03-12 per the page) | Senior leadership/technical competencies; the "unclear requirements … within the context of their team" clause |
 | S6 | GitLab. *Engineering Career Framework: Staff.* https://handbook.gitlab.com/handbook/engineering/careers/matrix/staff/ | First-party public handbook | The team-level-scope sentence; the other-people verbs; the currency caveat (competencies deferred to a linked spreadsheet) |
-| S7 | jorgef. *Engineering Ladders* (README.md). https://raw.githubusercontent.com/jorgef/engineeringladders/master/README.md | Community open-source framework (raw markdown; default branch `master`) | The five axes; the System axis levels 1–5; the Influence axis levels 1–5; senior beginning at level 4 |
+| S7 | jorgef. *Engineering Ladders* (README.md). https://raw.githubusercontent.com/jorgef/engineeringladders/master/README.md | Community open-source framework (raw markdown; default branch `master`) | The five axes; the System axis levels 1–5; the Influence axis levels 1–5; the Technology axis levels 4–5 (§3.6, §4.3); senior beginning at level 4; the absence of any "Staff" level |
 | S8 | Larson, W. *Staff archetypes.* StaffEng. https://staffeng.com/guides/staff-archetypes/ | First-party author-published (book companion) | The four archetypes; "not just a role … the organization's recognition"; the Architect-title note |
 | S9 | Larson, W. *What do Staff engineers actually do?* StaffEng. https://staffeng.com/guides/what-do-staff-engineers-actually-do/ | First-party author-published | The shared foundation across archetypes (technical direction, sponsorship/mentorship, organisational context, exploration, glue) |
 | S10 | Marlow, J. & Dabbish, L. (2013). *Activity Traces and Signals in Software Developer Recruitment and Hiring.* CSCW '13. https://www.cs.cmu.edu/~xia/resources/Documents/Marlow-cscw13.pdf | Peer-reviewed qualitative study, n=13 (7 employers, 6 job seekers) | Assessment vs conventional signals; free-time/initiative reading of side projects; costly-to-fake history; employers favouring cues cheap to verify |
@@ -1092,7 +1204,7 @@ publisher page was unreachable, the retrieval host is named in the table (§13, 
 | S16 | Google. *The Evolving SRE Engagement Model*, in *Site Reliability Engineering*. https://sre.google/sre-book/evolving-sre-engagement-model/ | First-party published book chapter | The definition of *production* as six aspects; the PRR framing |
 | S17 | Google. *Service Level Objectives*, in *Site Reliability Engineering*. https://sre.google/sre-book/service-level-objectives/ | First-party published book chapter | SLI/SLO definitions; publishing SLOs sets expectations |
 | S18 | Nygard, M. (2011-11-15). *Documenting Architecture Decisions.* Cognitect blog. https://www.cognitect.com/blog/2011/11/15/documenting-architecture-decisions | First-party, the originating definition of the ADR format | The Context/Decision/Status/Consequences format; "All consequences … not just the 'positive' ones"; political and social forces |
-| S19 | Fuller, J.B., Raman, M., Sage-Gavin, E. & Hines, K. *Hidden Workers: Untapped Talent.* Harvard Business School, Managing the Future of Work. https://www.hbs.edu/managing-the-future-of-work/research/Pages/hidden-workers-untapped-talent.aspx | First-party project page — **landing page only; the report PDF was not retrieved (G5)** | The structural-exclusion framing, at low specificity. No figure or category from the report is cited |
+| S19 | Fuller, J.B., Raman, M., Sage-Gavin, E. & Hines, K. *Hidden Workers: Untapped Talent.* Harvard Business School, Managing the Future of Work. https://www.hbs.edu/managing-the-future-of-work/research/Pages/hidden-workers-untapped-talent.aspx | First-party project page — **landing page only; nothing from the report PDF is used (G5)** | The structural-exclusion framing, at low specificity. No figure or category from the report is cited |
 
 **Local artifacts** (not counted as sources; verified with `cat`/`wc` in the repo at
 `/opt/skyy-net/portfolio`): `index.html` (53 lines), `style.css` (97), `projects.js` (65),

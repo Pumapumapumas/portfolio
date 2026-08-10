@@ -8,13 +8,34 @@ Feeds:          The case-study template this portfolio builds against, and the t
                 `Write-up →` links (href="#") in projects.js
 Last validated: 2026-08-10
 Revalidate:     medium — 3 months
-Confidence:     Definitive on the SHAPE of admired engineering write-ups (§2, §4, §7) — every
-                structural claim is quoted verbatim from a first-party published artifact.
+Confidence:     Definitive on the SHAPE of admired engineering write-ups (§2, §4, §7). Every
+                structural claim there is one of two things, both traceable to a fetch of a
+                first-party published artifact: a span quoted verbatim, or an observation of
+                where something sits in the fetched text (§4's four document-ordering claims
+                are the second kind, and are labelled as observations, not quotations).
                 Definitive on metric definitions (DORA, SRE SLO). Derived (clearly marked) on
                 the synthesis that produces the template in §8 and on the recruiter/peer
                 tension. Unverified→DECLINED on recruiter attention timing (§11, Gap G2):
                 the primary artifact was unreachable and is NOT cited. Gaps G1–G6 in §11.
-Critic:         not-yet-verified — 2026-08-10
+Critic:         PASS-WITH-FIXES — 2026-08-10. Verification found nothing fabricated: no
+                invented source, no dead link (the 21 cited URLs — 20 sources, [S12] at two
+                — were re-requested at correction time and every one resolved to HTTP 200;
+                [S14] does so via a single 301, disclosed in its citation entry), no
+                quotation whose characters the source does not contain, and every count in
+                the paper reproduced by independently enumerating the population and
+                counting it. What failed was a cluster of the paper's own
+                self-certifications, each of which promised more than the body delivers —
+                fixed by narrowing the promise to what the body actually, honestly does.
+                Fixed: the "no number attributed to the MDC platform" line in the
+                Read-this-first block; the "every structural claim is a quote" line above;
+                §8's missing derived marker; the two gap findings (G3, G4) that stated no
+                search method. Also fixed: an uncited production-status claim about the
+                platform, corrected at all four sites that carried it (§6.3, §7.3, §8.0 and
+                §8.1, where the in-repo evidence now sits), and five quoted spans
+                whose characters did not match the source — four typographic apostrophes
+                silently ASCII-fied, and one nested double-quote pair rewritten as single
+                quotes — each repaired to the source codepoints and re-matched. One
+                reported defect was REJECTED on re-fetch; the evidence is in §13.
 ```
 
 **Volatility map (per Research Standard §3, mixed-volatility rule).** The header carries the
@@ -27,8 +48,15 @@ hiring-signal evidence sits), and §11 (gaps) — that is the ~30% of the paper 
 satisfy: *the strongest sections of the recommended template are the ones that require measured
 numbers and a real named failure, and this subject has published neither.* The first build task
 is therefore **measurement and incident-recall, not writing**. §8's worked outline deliberately
-leaves every numeric slot as a `MEASURE:` placeholder. **No number in this paper is attributed to
-the MDC platform**; inventing one would be exactly the fabrication the Research Standard forbids.
+leaves every measurable slot as a `MEASURE:` placeholder: **no measured quantity — no timing, no
+uptime, no throughput, no enumerated inventory — is attributed to the MDC platform anywhere in
+this paper**, and inventing one would be exactly the fabrication the Research Standard forbids.
+
+The paper does carry two *non*-measured structural descriptors of the platform — "three K3s
+clusters", and the two businesses the platform is built to serve — and neither is asserted on this
+paper's own authority: both are taken from the operator's own in-repo content, and §8.1 cites them
+there **and states their actual current build status, which is not "complete"**. That distinction
+is the whole of the claim: this paper sources structure, and refuses to source numbers.
 
 ------------------------------------------------------------------------
 
@@ -139,7 +167,7 @@ and prescribes, for technical determinations [S4]:
 > benefits and drawbacks of each option.
 
 > Document our reasoning including data and references wherever possible; making it easy for our
-> future selves (and those who join in the future) to understand the decisions we've made and why.
+> future selves (and those who join in the future) to understand the decisions we’ve made and why.
 
 *(Definitive — first-party, published, versioned, publicly readable.)*
 
@@ -215,7 +243,7 @@ scale-of-problem and closing on measured deltas [S10]:
 
 > At the beginning of 2022, it had 177 nodes with trillions of messages.
 
-> we're going from running 177 Cassandra nodes to just 72 ScyllaDB nodes
+> we’re going from running 177 Cassandra nodes to just 72 ScyllaDB nodes
 
 > fetching historical messages had a p99 of between 40-125ms on Cassandra, with ScyllaDB having a
 > nice and chill 15ms p99 latency
@@ -226,10 +254,12 @@ by a reader, which is exactly the ceiling discussed in §7.)*
 ### 2.4 The explainer
 
 Tailscale's "How NAT traversal works" is the frame for making an invisible mechanism legible with
-no product screenshot at all. It opens by naming a concrete problem rather than a technology
-[S11]:
+no product screenshot at all. After two framing sentences that name the product and the mechanism
+(a back-reference to a prior post, then "we glossed over how we can get through NATs (Network
+Address Translators)"), it starts the body from a concrete problem rather than a technology — the
+sentence below is the fourth in the post [S11]:
 
-> Let's start with a simple problem: establishing a peer-to-peer connection between two machines.
+> Let’s start with a simple problem: establishing a peer-to-peer connection between two machines.
 
 Diátaxis names this documentation type and its job [S13]:
 
@@ -356,8 +386,10 @@ for pictures: hierarchical levels of zoom, used selectively [S12].
 
 The 1,200–2,000 figure is **derived, not measured**: it is the range in which NN/g's cost model
 (≈4.4s per extra 100 words [S16]) keeps a motivated reader's cost under ~5–8 minutes while leaving
-room for the six spine sections in §8. §11 G4 records that no measured optimum for engineering
-case studies was found; §12 T3 makes it a test rather than a claim.
+room for the six narrative sections of the §8 spine — **8.2, 8.3, 8.4, 8.5, 8.6, 8.7**, counted by
+listing them; the other four of §8's ten template sections (8.0 title, 8.1 at-a-glance, 8.8 status,
+8.9 artifacts) are short fixed-format slots, not prose. §11 G4 records that no measured optimum for
+engineering case studies was found; §12 T3 makes it a test rather than a claim.
 
 **Publish L1 for all three projects before writing any L2.** *(Derived: three dead `href="#"` links
 are three broken promises; one deep essay plus two dead links is strictly worse than three
@@ -421,14 +453,19 @@ observed practice in [S9][S10]. The definitions are the cited sources'.)*
   unfalsifiable; prefer the absolute pair ("was X min, now Y min, measured on N runs").
 - **Self-classification against industry bands** ("elite DORA performer") — [S14] explicitly warns
   against disparate comparisons and metrics-as-goal.
-- **Synthetic throughput** ("handles N req/s") for a system whose real load is two businesses.
+- **Synthetic throughput** ("handles N req/s") for a system whose real load is the two small
+  private businesses it was built to serve.
 - **Aggregate counts inflated by granularity** (counting every Ansible task as a "component").
+- **A status adjective standing in for a status date** ("in production") — it reads as a
+  measurement and is not one. State what runs, for whom, and as of when; §8.1 works this case
+  through on the MDC platform itself, where the naive filling would have overstated it.
 
 **The honest move, and it is a strong one:** where a number would be inflated, state the
-constraint instead. "Two businesses run on it; the acceptable maintenance window is X; the
-platform has never been rebuilt without the declared state" is *specific*, checkable in principle,
-and costly to fake — an assessment-signal-shaped sentence in Marlow & Dabbish's terms [S18].
-*(Derived.)*
+constraint instead. A sentence of the shape "the acceptable maintenance window is X; Y is the
+workload it was built for; the platform has never been rebuilt without the declared state" is
+*specific*, checkable in principle, and costly to fake — an assessment-signal-shaped sentence in
+Marlow & Dabbish's terms [S18]. Note the shape carries no verified value in it: every slot is
+still the author's to measure, which is the point. *(Derived.)*
 
 ------------------------------------------------------------------------
 
@@ -444,7 +481,7 @@ C4 is the load-bearing source and it is unusually restrained about quantity [S12
 
 > The different levels of zoom allow you to tell different stories to different audiences.
 
-> you don't need to use all 4 levels of diagram
+> you don’t need to use all 4 levels of diagram
 
 > the system context and container diagrams are sufficient for most software development teams
 
@@ -509,7 +546,8 @@ attested*: contributions accepted into high-status projects, described as [S18]
 > signal because it required approval of the code by others in the community, meaning it would be
 > extremely difficult to falsify.
 
-A private cloud running two private businesses **structurally cannot generate** that class of
+A private cloud built to serve its operator's own private businesses **structurally cannot
+generate** that class of
 signal: there is no external reviewer, no merged upstream patch, no public user base. The case
 study's job is therefore to get as close as the constraints allow — public repos, public CI,
 published digests, named constraints, admitted failures — and the honest reading is that this
@@ -530,21 +568,60 @@ distrusted popularity counts —
 This is the deliverable. Each section names the evidence that justifies it. Target: **L1,
 1,200–2,000 words**, front-loaded per [S15].
 
+***Derived* — this whole section is the paper's own synthesis, not a finding any source states.**
+Its inputs are the frame-altitude conclusion in §3 (which frame carries which unit), the three-layer
+model in §5 (which decides that this is L1 and how long L1 runs), and the format decisions in §7
+(two diagrams; one incident section; which legibility devices get a slot). The per-section source
+citations below are definitive for the *rule each section applies*; the **ordering, the section
+count, and the slot boundaries are inferred across those sources** and no source prescribes them.
+
+**The `*MDC:*` lines are worked illustrations of each slot, not vetted assertions about the
+platform.** Any slot describing what has been measured, or what is running today, is a `MEASURE:`
+placeholder; structural descriptors carry their source and their current status inline (§8.1).
+
 ### 8.0 Title
 Short noun phrase naming the system **and** the outcome. Source: [S1] ("These documents have names
 that are short noun phrases"), [S3] ("short title, representative of solved problem and found
 solution").
-*MDC:* "MDC Private Cloud Platform — a declarative private cloud that two businesses run on."
+*MDC:* "MDC Private Cloud Platform — a declarative private cloud that `MEASURE:` <what actually
+runs on it on publication day>." The outcome clause is the slot the title turns on, and it is the
+one clause this paper will not fill: see §8.1 for why the obvious filling ("two businesses run on
+it") overstates the current state.
 
 ### 8.1 At a glance (5 lines, above the fold)
 Fixed labels: **What it is / Why it exists / My role / Scale & constraints / Status**.
 Source: inverted pyramid [S15]; the stop-reading-anywhere property [S15]; reading-volume data
 [S16].
 *MDC:* What — a foundation-up private cloud (Proxmox, three K3s clusters, Django/Temporal control
-plane, Ceph, ArgoCD, Ansible). Why — `MEASURE:` the operating need that forced it, stated as a
-constraint not a preference. Role — sole architect and operator. Scale — `MEASURE:` node/cluster/
-service counts by enumeration from the desired-state repo. Status — in production; two businesses
-(property management; an ERPNext-based business-ops suite) run on it.
+plane, Ceph, ArgoCD, Ansible). *This stack list is not asserted by this paper; it is the operator's
+own site copy, verbatim from the tile in `projects.js`: "Proxmox + three K3s clusters, a
+Django/Temporal control plane, ArgoCD GitOps, and Ceph distributed storage".* Why — `MEASURE:` the
+operating need that forced it, stated as a constraint not a preference. Role — sole architect and
+operator. Scale — `MEASURE:` node/cluster/service counts by enumeration from the desired-state repo.
+Status — **`MEASURE:` state what is actually running, for which workloads, as of the publication
+date.**
+
+**Do not fill the Status slot with "in production; two businesses run on it" — the workspace's own
+current-state docs contradict both halves, and this is precisely the overstatement §6.3 warns
+about.** What those docs actually say, and therefore the ceiling on any status sentence:
+
+- The three-cluster topology is a *target*, not a built fact. `/opt/skyy-net/CLAUDE.md` heads that
+  section **"Three K3s Clusters (planned)"** and records the control plane as running "as K3s pods
+  on the temporary **k3s-0** bootstrap cluster (Skyy-Command VM) today". So the tile's "three K3s
+  clusters" is the operator's own published framing of the design, and the study may repeat it as
+  *architecture* — but not as deployed inventory, and the Scale line must be enumerated, not echoed.
+- The two businesses exist as documented components, and both are pre-production. The ERPNext-based
+  business-ops suite is `algorithm-and-sons`, whose repo CLAUDE.md states "**Repo status:**
+  founding/planning phase. Docs lead; code follows ratification.", whose roadmap is marked
+  "**Founding DRAFT — not yet ratified.**" with one checked box against twenty unchecked (counted by
+  enumerating `- [x]` and `- [ ]` lines in `docs/development/roadmap.md`), and whose Phase-1 doc
+  records that "P1 otherwise runs testing-only (synthetic data) until it lands" pending a platform
+  backup gap. The property-management business (Rue) "onboards as the 2nd ERPNext `Company`" in
+  **Phase 2**.
+
+The honest status sentence available *today* is therefore about the platform, not its tenants —
+what is built, what is bootstrap-temporary, and what is next — and it gets *stronger*, not weaker,
+when the drafting date is on it. This is the §6.3 rule applied to the paper's own worked example.
 
 ### 8.2 The problem and the constraints
 Value-neutral statement of forces, per [S1]: "This section describes the forces at play, including
@@ -563,7 +640,8 @@ what each owns, Ceph, the Django/Temporal control plane, ArgoCD's reconciliation
 ### 8.4 Key decisions (3–5 compressed decision blocks)
 Each block: **Decision — Options considered — Why this one — What it cost.** One decision per
 block [S2]; options are mandatory [S4][S3]; the cost line is [S1]'s "All consequences should be
-listed here, not just the 'positive' ones."
+listed here, not just the "positive" ones." *(The inner quotation marks are the source's own;
+they are reproduced rather than restyled as single quotes, per §13.)*
 *MDC candidates:* (a) three K3s clusters rather than one — isolation vs. operational overhead;
 (b) SkyyGate physically excluded from the clusters — attack surface vs. uniformity; (c) 1Password
 SDK direct rather than 1Password Connect — the alternative was evaluated and rejected, which is
@@ -727,10 +805,33 @@ from the primary artifact first.
 
 **G3. No comparative measurement of proof-asset persuasiveness** (diagram vs. terminal recording
 vs. live telemetry vs. video) was located. The cost/risk column in §7.2 is my estimate, marked
-derived. **Handed to pool topic 6**, which owns this question.
+derived. **Method** *(run 2026-08-10, at correction time — the original drafting pass recorded no
+method for this gap, so this is a fresh search and not a reconstruction of one)*: three arXiv API
+queries over `https://export.arxiv.org/api/query`, each enumerated by counting `<entry>` elements
+in the returned Atom feed rather than reading any reported total —
+`all:"software architecture" AND all:diagram AND all:"empirical study" AND all:comprehension`
+returned **0 entries**; `all:screencast AND all:documentation` returned **4**, none comparative
+(*Find, Understand, and Extend Development Screencasts on YouTube*; *The ARDoCo Tool Landscape*;
+*Beyond the Code: A Multi-Modal Assessment Strategy…*; *The Algorithmic Autoregulation Software
+Development Methodology*); `all:"developer portfolio"` returned **8**, all but one from unrelated
+fields (finance, malware detection, instrumentation). One general web sweep for a diagram-vs-
+screencast-vs-demo persuasiveness comparison surfaced only persuasive-design and eHealth
+literature and vendor marketing — nothing measuring these assets against each other in an
+engineering-credibility setting, and nothing citable. **Handed to pool topic 6, which owns this
+question and should treat the gap as open rather than settled: this search was broad, not
+exhaustive, and did not cover HCI venue proceedings (CHI, VIS, ICSE) directly.**
 
 **G4. No measured optimum length for engineering case studies.** [S16][S17] measure general web
-content in 2007–2008. The §5 budget is derived from their cost model, not observed.
+content in 2007–2008, and they are the **only** measured sources located on reading length at all
+— everything else found was unmeasured advice. The §5 budget is derived from their cost model, not
+observed. **Method** *(also run 2026-08-10 at correction time; the drafting pass stated no method
+here either)*: three arXiv API queries, enumerated the same way — `all:"article length" AND
+all:"reading time"` returned **0 entries**; `all:"document length" AND all:"web readers"` returned
+**0**; `all:"case study" AND all:"optimal length"` returned **1**, unrelated (*Evaluating Malware
+Forensics Tools*). One general web sweep returned only writing-service and professional-body
+guidance (e.g. a 3,000-word cap in an unrelated surveying accreditation scheme) — prescriptive
+advice, not measurement, and therefore not citable under §3. **T3 in §12 is the intended
+resolution: measure it on this site rather than search further.**
 
 **G5. No source located on how a *sole operator*'s case study is received differently from an
 organisation's**, and none on how a *client* audience reads a published failure narrative. Both are
@@ -769,7 +870,32 @@ HTML tags locally where the source was HTML, normalising runs of whitespace to s
 then confirming the span by **exact substring match** against the fetched bytes. Spans that failed
 that check were rewritten or dropped. PDF text was extracted locally from the fetched file. Where
 de-tagging introduced spacing artifacts (e.g. around punctuation in [S12], [S14]), the span is
-reproduced as returned rather than tidied.
+reproduced as returned rather than tidied. **No typographic normalisation is performed in either
+direction:** a source's curly apostrophe (U+2019), minus sign (U+2212), or nested double quotes are
+reproduced as those characters, and are never silently replaced with their ASCII lookalikes.
+
+**Re-verification pass, 2026-08-10 (correction round).** Every span above was re-matched against a
+fresh `curl` fetch under the method just stated. Five failed and were repaired to the source
+codepoints, then re-matched and confirmed FOUND: the [S4] Oxide span ("the decisions we’ve made and
+why."), the [S10] Discord span ("we’re going from running 177…"), the [S11] Tailscale span ("Let’s
+start with a simple problem:"), the [S12] C4 span ("you don’t need to use all 4 levels of diagram")
+— all four had U+2019 in the source and ASCII `'` in the paper — and one inline copy of the [S1]
+consequences rule in §8.4, whose nested `"positive"` had been restyled as `'positive'`.
+
+**One reported defect was checked and REJECTED.** It was reported that §9's [S19] span substituted
+an ASCII hyphen for the source's U+2212 minus sign. It does not: a byte-level comparison of the
+paper against a fresh fetch of `developers.google.com/tech-writing/one/audience` shows **U+2212 in
+both**, and the full span — including `your audience's` with an ASCII apostrophe, which is also
+what the source has — matches by exact substring. The span was left unchanged; changing it would
+have introduced the defect it was reported as having. Spans in [S1], [S2], [S7] and [S8] were
+checked for the same class of error and are correct as written: **the spans this paper quotes from
+them use ASCII apostrophes in the source**. That is a fact about those spans, not about those
+documents — and the distinction is load-bearing for a refresh. Three of the four sources *do*
+contain U+2019 elsewhere: enumerating every occurrence in the de-tagged, whitespace-normalised
+fetch and counting the enumeration gives [S1] = 0, [S2] = 3, [S7] = 9, [S8] = 1. [S7] in
+particular mixes both forms in running prose. **A newly added quotation from any of these sources
+must therefore be character-matched individually; "this document uses ASCII apostrophes" is not a
+property any of them has, and must not be used to skip the check.**
 
 - **[S1]** Michael Nygard, *Documenting Architecture Decisions*, 2011-11-15 — https://cognitect.com/blog/2011/11/15/documenting-architecture-decisions *(first-party, rendered HTML de-tagged locally)*
 - **[S2]** *Architecture decision record (ADR)* — https://raw.githubusercontent.com/architecture-decision-record/architecture-decision-record/main/README.md *(raw markdown; `default_branch: main` confirmed via GitHub API; repo redirects from `joelparkerhenderson/architecture-decision-record`)*
@@ -784,7 +910,7 @@ reproduced as returned rather than tidied.
 - **[S11]** Tailscale, *How NAT traversal works*, 2020-08-21 — https://tailscale.com/blog/how-nat-traversal-works
 - **[S12]** Simon Brown, *The C4 model for visualising software architecture* — https://c4model.com/ and https://c4model.com/diagrams
 - **[S13]** *Diátaxis — Explanation* — https://diataxis.fr/explanation/
-- **[S14]** Nathen Harvey / DORA, *DORA's software delivery performance metrics* — https://dora.dev/guides/dora-metrics-four-keys/
+- **[S14]** Nathen Harvey / DORA, *DORA's software delivery performance metrics* — https://dora.dev/guides/dora-metrics-four-keys/ *(HTTP 301 to `https://dora.dev/guides/dora-metrics/`, which is the page actually fetched and quoted; the legacy "four-keys" slug is retained here because it is the citable published URL, and its redirect target is where the five-metric model is stated)*
 - **[S15]** Amy Schade / Nielsen Norman Group, *Inverted Pyramid: Writing for Comprehension*, 2018-02-11 — https://www.nngroup.com/articles/inverted-pyramid/
 - **[S16]** Jakob Nielsen / Nielsen Norman Group, *How Little Do Users Read?*, 2008-05-05 — https://www.nngroup.com/articles/how-little-do-users-read/
 - **[S17]** Jakob Nielsen / Nielsen Norman Group, *Long vs. Short Articles as Content Strategy*, 2007-11-11 — https://www.nngroup.com/articles/content-strategy-long-vs-short/

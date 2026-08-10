@@ -8,7 +8,8 @@ Topic:          Which sections do respected engineering/infrastructure portfolio
                 peers, hiring managers, and prospective clients in balance?
 Feeds:          The site's information architecture — the concrete section list the
                 buildout works from, replacing today's hero → one-paragraph About →
-                3 project tiles → footer (index.html, 4 sections).
+                3 real project tiles plus a fourth placeholder card → footer
+                (index.html, 4 sections; projects.js, 4 array entries).
 Last validated: 2026-08-10
 Revalidate:     medium — 3 months
 Confidence:     DEFINITIVE — the attention/reading/homepage findings quoted from NN/g's own
@@ -16,12 +17,23 @@ Confidence:     DEFINITIVE — the attention/reading/homepage findings quoted fr
                 quoted spans are character-exact), and the bibliographic facts of the
                 peer-reviewed papers cited (Crossref API). DEFINITIVE for the observed
                 structure of the 21 enumerated first-party engineer sites — each was
-                fetched and its markup enumerated by this analyst; every count in §2 was
-                produced by listing the population and counting the list.
+                fetched and its markup enumerated by this analyst; every count in §2 —
+                except the whole-page word counts named next — was produced by listing
+                the population and counting the list.
+                APPROXIMATE — every whole-page word count in this paper. There are exactly
+                three sites, enumerated: §2.3's About-length table, §2.3's ~5,800-word figure
+                for gwern's `/me`, and §2.4's ~1,250-word figure for jacobian's `/help/`.
+                Such counts are tag-stripper-dependent — independent extractions of the same
+                pages on 2026-08-10 disagreed on every integer. The durable claims are the
+                length BAND and the ordering tiers, never a cell, and each of the three sites
+                is marked as such. (Extractor spread is immaterial to the gwern figure alone:
+                it is there to justify an exclusion, and its ~7x separation from the 83–805
+                band survives any plausible extraction difference.)
                 DERIVED — every "therefore the portfolio should…" recommendation, including
-                the entire §4.6 section list. NN/g studied corporate/e-commerce/B2B sites,
-                not personal engineering portfolios; the transfer is this paper's inference
-                and is labelled as such at each point.
+                the entire §4.6 section list. NN/g studied corporate/e-commerce/B2B/news/
+                blog/encyclopedic pages, not personal engineering portfolios; the blog
+                inclusion narrows the transfer gap without closing it (§5.1), and the
+                transfer is this paper's inference, labelled as such at each point.
                 UNVERIFIED / EXCLUDED — the "recruiters scan for N seconds" family of
                 claims. The primary artifact was unreachable by two independent retrieval
                 paths (§5.4); this paper asserts no seconds figure and recommends
@@ -29,7 +41,52 @@ Confidence:     DEFINITIVE — the attention/reading/homepage findings quoted fr
                 GAPS — no controlled study of *personal engineering portfolios* was found
                 (§5.1); two exemplar sites were unfetchable (§2.1); the Lindgaard 50 ms
                 abstract could not be retrieved (§5.4).
-Critic:         not-yet-verified — 2026-08-10
+Critic:         PASS-WITH-FIXES — 2026-08-10, over four rounds. An independent verifying pass
+                re-fetched **every URL in the §6 numbered citation list**, and matched every
+                quoted span as an exact character sequence against raw fetched bytes rather
+                than through a summarizing retrieval layer. All return HTTP 200 except the
+                two ACM DOI links (citations 10, 11), which redirect to `dl.acm.org` and
+                return **403 to an automated client** — a bot block, not a dead record; both
+                works' bibliographic facts come from the Crossref API (200) and Fogg's text
+                from the mirror PDF (200), each cited alongside. Separately, one URL named in
+                §2.3's BODY — `noidea.dog/projects` — is a **404**; it is reported as one,
+                nothing is cited to it, and §2.3 states what is actually there instead.
+                **Nothing in this paper was fabricated, and no source was made to say
+                something it does not say.**
+                The defects found were concentrated in three places, all of them in this
+                paper's own handling rather than in the sources themselves:
+                  (a) THE PAPER'S OWN COUNTS — a project-entry total (17, actually 14); a
+                      contact-affordance count asserted with no stated criterion (4, now 3
+                      under a criterion the paper states, with the 5-of-21 alternative
+                      disclosed); a proposition argued from a count that did not measure it
+                      (P4); two section counts that contradicted each other (P13, P14); an
+                      About-page exclusion described as a retrieval failure that never
+                      happened; a negative finding blamed on the wrong cause (an unmeasured
+                      project count attributed to a heading extractor when the page it named
+                      simply does not exist — §2.3, now enumerated instead of gapped); and
+                      the demotion of every whole-page word count in the paper from definitive
+                      to APPROXIMATE, because independent extractions of the same pages
+                      disagreed on every integer (§2.3 ×2, §2.4, P12).
+                  (b) TRANSCRIPTIONS OF IN-REPO ARTIFACTS — a wrong `index.html` line number
+                      with a second occurrence of the string unreported, and a `projects.js`
+                      array read as 3 entries when it holds 4.
+                  (c) ONE MISCHARACTERIZATION OF AN EXTERNAL SOURCE'S SCOPE — §5.1 claimed
+                      NN/g's findings were collected on page types that excluded blogs, while
+                      the scrolling study quoted in that same sentence lists blogs among its
+                      pages. The source was quoted correctly and reasoned from wrongly; the
+                      repair narrows the transfer gap the section exists to state. One
+                      quotation-style slip is in the same class: a nested double quotation
+                      mark rendered as a single, now restored and the normalization note
+                      tightened to forbid the restyling.
+                Every repaired span was re-derived from its source in this pass rather than
+                carried over on the verifier's word, and that discipline earned its cost:
+                **three of the verifier's own numbers did not survive re-derivation and are
+                corrected here rather than adopted** — the contact count (4 was wrong under
+                every criterion, including the verifier's own), the first-person count (11 of
+                12 was wrong; it is 10, simonwillison's About being a third-person bio inside
+                a first-person frame), and the claim that the ≤500-word split reproduced
+                exactly (it is 8 or 9 of 12 depending on the extractor). All three pushbacks
+                were re-checked and upheld in round 3.
 ```
 
 > **Method note for the verifying pass.** Every quoted span in this paper was obtained by
@@ -44,6 +101,10 @@ Critic:         not-yet-verified — 2026-08-10
 > apostrophes and quotation marks are reproduced here with their ASCII equivalents. Nothing
 > else differs from the fetched text — no word, number, or other punctuation mark — and a
 > verifier diffing a quote should apply the same folding before calling a mismatch.
+> **The normalization folds character shape only, never quotation *style*:** where a source
+> nests quotation marks inside a quoted span, they are reproduced at their source depth
+> (a double stays a double), and the outer `"…"` around each quoted span is this paper's
+> own delimiter, not the source's.
 
 ---
 
@@ -64,14 +125,19 @@ Three findings do most of the work, and the first one contradicts the site's cur
    A single deep page is the wrong shape; a shallow page with dead links (today's state) is
    also the wrong shape. [definitive as NN/g findings; the application is derived]
 3. **The three audiences diverge on exactly one structural decision: the contact surface.**
-   Only 4 of 21 peer-respected engineer sites carry an explicit contact/availability link on
-   the landing page (§2.3) — but the client audience is the one that *converts* there, and
+   Only 3 of 21 peer-respected engineer sites carry a *named* contact/availability
+   affordance on the landing page — 5 of 21 if a bare email glyph in a social-icon row
+   counts; the criterion and both counts are stated in §2.3 — but the client audience is
+   the one that *converts* there, and
    NN/g's B2B research measures prospect-facing sites failing precisely at "answer my
    questions and let me act." This is the paper's central tension and §5.2 argues both sides.
 
-**Out-of-scope observation, surfaced not researched:** `index.html` line 17 states
-`biomedical informatics (M.S.)`; the dispatch brief states **M.S. Computer Science**. One of
-the two is wrong. This is a factual-accuracy issue for the operator, not a finding of this
+**Out-of-scope observation, surfaced not researched:** `index.html` **line 16** (the
+`hero__tagline`) states `biomedical informatics (M.S.)`; the dispatch brief states **M.S.
+Computer Science**. One of the two is wrong. **The string occurs twice** — the second is
+`index.html` **line 35**, `an M.S. in biomedical informatics.` inside the About paragraph —
+so a correction has to touch both sites (`grep -n biomedical index.html` returns exactly
+these two lines). This is a factual-accuracy issue for the operator, not a finding of this
 paper — but a portfolio whose hero mis-states a degree fails the credibility bar that §1.2's
 sources measure, so it belongs in front of the IA work rather than behind it.
 
@@ -197,25 +263,78 @@ examples:
 **About / bio reachable in one step from the landing page: 15 of 21.** 13 via an explicit
 About-type link (`brendangregg` → `/blog/about.html`, `jvns` → `/about`, `simonwillison` →
 `/about/`, `jeffgeerling` → `/about/`, `hillelwayne` → `/about/`, `mtlynch` → `/about/`,
-`noidea.dog` → `/about`, `fasterthanli` → `/about`, `lethain` → `/about`, `gwern` → `/about`,
-`brandur` → `/about`, `vickiboykis` → `/about`, `taniarascia` → `/me/` labelled "About Me"),
-plus 2 that put the bio **inline on the landing page instead of behind a link** (`brooker`,
-`jacobian`). The remaining 6 expose no bio in one step (`danluu`, `xeiaso`, `ciechanow.ski`,
+`noidea.dog` → `/about`, `fasterthanli` → `/about`, `lethain` → `/about`, `gwern` → `/me`
+labelled "Me", `brandur` → `/about`, `vickiboykis` → `/about`, `taniarascia` → `/me/`
+labelled "About Me"), plus 2 that put the bio **inline on the landing page instead of behind
+a link** (`brooker`, `jacobian`).
+The remaining 6 expose no bio in one step (`danluu`, `xeiaso`, `ciechanow.ski`,
 `nelhage`, `tbray`, `apenwarr`). [definitive as an enumeration; anchor extraction was re-run
 after an initial regex under-counted unquoted `href=` attributes — the corrected pass is what
 these numbers come from]
 
-**Explicit contact / availability link on the landing page: 4 of 21.** `xeiaso` ("Contact" →
-`/contact/`), `hillelwayne` ("Contact via Email" → `mailto:`), `noidea.dog` ("Contact" →
-`/contact`), `jacobian` (`/contact/` **and** `/help/`). `gwern.net` exposes a `/help` link
-that was **not verified** to be a personal-availability page and is excluded from the count
-rather than guessed at. `lethain.com` surfaces "Ways I'm available to help." only as a dated
-2020 entry inside its post archive — **not** a navigation item; an earlier pass of this
-analysis mis-read it as one, and the corrected reading is what is reported. [definitive as an
-enumeration]
+> **One disclosed borderline in that 13.** `gwern.net` carries **two** author-type links side
+> by side: `/about`, labelled "Site" (`title="Site ideals, source, content, traffic, examples,
+> license"`), and `/me`, labelled "Me" (`title="Who am I online, what have I done, what am I
+> like?…"`). Only `/me` is a personal bio — `/about` is titled "About This Website" and its
+> own `<meta name="description">` calls it a *"Meta page describing Gwern.net site ideals…"*.
+> The site is counted because `/me` satisfies the criterion; an earlier pass of this analysis
+> recorded the destination as `/about`, and the corrected reading is what is reported. The
+> count of 13 is unchanged either way.
 
-**About-page length.** Word counts of the 12 About pages that fetched, measured as whole-page
-text including site chrome (so each is an **upper bound** on the prose):
+**Explicit contact / availability link on the landing page: 3 of 21.**
+
+**The criterion, stated before the count** (an earlier pass counted without one, and the
+number moves depending on which you pick): a site counts when its landing page carries a
+**named contact-or-availability affordance** — a link whose visible or accessible label names
+contacting the person or their availability, sitting in navigation or in prose. **An email
+address exposed only as one glyph in a row of social icons does NOT count**, because the
+question this number feeds (§5.2) is whether these engineers build a *surface* that invites
+contact, not whether an address is technically findable.
+
+Under that criterion, **3 of 21**: `xeiaso` ("Contact" in the top nav → `/contact/`),
+`noidea.dog` ("Contact" in the page-collection nav → `/contact`), `jacobian` (two prose
+anchors in the landing bio, "how to get in touch" → `/contact/` **and** "the ways I&rsquo;m
+available to help" → `/help/`).
+
+**Disclosed borderline exclusions, so the criterion can be re-run against a different one.**
+Exactly **three** `<a href="mailto:…">` elements exist across the 21 landing pages, and **all
+three are social-icon glyphs**, not named affordances:
+
+| Site | Element | Where |
+|---|---|---|
+| `hillelwayne` | `<a href='mailto:h@hillelwayne.com'>` with `<span class='screen-reader'>Contact via Email</span>` + an `aria-hidden` SVG | footer `<ul class='social-menu'>` — 2 items, email and GitHub. The top nav is Blog / Talks / About / Logic for Programmers / Newsletter, with **no** contact item |
+| `ciechanow.ski` | `<a class="email" href="mailto:bartosz@ciechanow.ski" title="e-mail">` | persistent header `<div id="social">`, alongside Patreon, X/Twitter, Instagram, RSS |
+| `noidea.dog` | `<a href="mailto:blog@noidea.dog" … class="sqs-svg-icon--wrapper email">` | Squarespace social-icon row (this site already counts, via its "Contact" nav item) |
+
+**Counting those glyphs instead gives 5 of 21** (`xeiaso`, `noidea.dog`, `jacobian`,
+`hillelwayne`, `ciechanow.ski`). Both numbers are reported so a reader who prefers the broader
+criterion is not misled; **the paper uses 3 of 21 throughout**, and §5.2's argument is
+unaffected in direction by the choice — the broader criterion still leaves the affordance rare.
+
+**Two further exclusions, now verified rather than guessed.** `gwern.net`'s `/help` link is
+**not** a personal-availability page: the document is titled "Site Help" and its
+`<meta name="description">` reads *"Short cheatsheet documentation about Gwern.net keybindings
+&amp; features."* — a UI cheatsheet. (An earlier pass excluded it as *unverified*; it is now
+excluded as *verified not to qualify*.) `lethain.com` surfaces "Ways I'm available to help."
+only as a dated 2020 entry inside its post archive (`<time datetime=2020-06-12…>`) —
+**not** a navigation item; an earlier pass mis-read it as one, and the corrected reading is
+what is reported. [definitive as an enumeration under the stated criterion; the criterion
+itself is this paper's choice and is argued, not measured]
+
+**About-page length.** Word counts of **12 of the 13** About destinations, measured as
+whole-page text including site chrome (so each is an **upper bound** on the prose).
+
+**The 13th, `gwern.net`, is excluded — and it is not a retrieval failure.** Both of its
+author-type destinations fetch fine on 2026-08-10 (`/me` HTTP 200, ~207 KB; `/about` HTTP 200,
+~213 KB). They are excluded on a *genre and scale* ground: `/about` is a site-meta document,
+not a bio (see the borderline note above), and `/me` — the actual bio — runs to roughly **5,800
+words** against a 83–805 range for the other twelve. That figure is **approximate**, like every
+whole-page word count in this paper, but uniquely the extractor spread does not matter here:
+the number exists only to justify an exclusion, and a ~7x separation from the band survives any
+plausible difference in tag-stripping. Including it would move the median by inspection and
+tell the reader nothing about how long an engineer's About page runs; it is a
+different artifact. An earlier pass of this analysis wrote "the 12 About pages that fetched,"
+which asserted a failure that did not happen. [gap closed; the exclusion is a stated choice]
 
 | Site | words | Site | words |
 |---|---|---|---|
@@ -226,8 +345,28 @@ text including site chrome (so each is an **upper bound** on the prose):
 | jeffgeerling | 270 | brendangregg | 588 |
 | hillelwayne | 339 | simonwillison | 805 |
 
-n = 12; **median 342 words**; range 83–805; **8 of 12 at or under 500**. [definitive as an
-enumeration of these 12 pages]
+n = 12; median 342 words; range 83–805; 8 of 12 at or under 500.
+
+> **These integers are APPROXIMATE, and that is a finding about the measure, not a hedge.**
+> A whole-page word count is tag-stripper-dependent: what counts as a word depends on whether
+> the stripper drops `<script>`/`<style>`/`<svg>`, whether it unescapes entities, and whether
+> it treats bare punctuation as a token. The same 12 URLs were extracted three independent
+> times on 2026-08-10. The table above is extraction #1. Extraction #2 (this pass;
+> `curl -sSL <url>` → drop `script|style|noscript|svg|head` and comments → strip tags →
+> `html.unescape` → count whitespace-separated tokens containing at least one alphanumeric)
+> returned **median 345.5, range 115–789, and 9 of 12 at or under 500** — differing from the
+> table on **every page**, and flipping `fasterthanli` (511 → 495) across the 500 line. A
+> third extraction during the verifying pass returned counts higher than the table on every
+> page (reported to this analyst, not re-run here). **So "8 of 12 at or under 500" does not
+> reproduce exactly** — it is 8 or 9 depending on the stripper.
+>
+> **What IS durable across all three extractions, and what the paper's recommendations rest
+> on:** every one of the 12 is short (none reaches 810 words even counting chrome); the median
+> sits in the **330–370** band; and **8–9 of 12 fall at or under 500 words** — two-thirds to
+> three-quarters, and the paper reports both ends because the quantity is unstable. The
+> rank *tiers* are stable (mtlynch/noidea.dog shortest, simonwillison longest); adjacent ranks
+> are not. [definitive for the band and the tiers; **approximate** for every individual
+> integer — a downstream consumer should cite the band, never a cell]
 
 **Project sections, where they exist, are curated and small.**
 - Xe Iaso's landing page carries a section headed "Highlighted Projects" with **6** list
@@ -235,22 +374,55 @@ enumeration of these 12 pages]
   anti-scraper bot filter that protects git servers for GNOME, UNESCO, and many other small
   communities"*. ([xeiaso.net](https://xeiaso.net/))
 - Julia Evans's `/projects/` page: **8** headed entries.
-- Michael Lynch's `/projects/` page: **17** entries, grouped under **3** category headings
+- Michael Lynch's `/projects/` page: **14** entries, grouped under **3** category headings
   ("Businesses", "Educational", "Open-Source Projects"), each entry carrying an explicit **date
   range** including end dates for retired work. ([mtlynch.io/projects](https://mtlynch.io/projects/))
+  **Extraction basis:** the page's `<h2>` elements are the three category headings and its
+  `<h3>` elements are the entries; enumerated and counted 2026-08-10 as Businesses = TinyPilot,
+  Zestful, Is It Keto, Portfolio Rebalancer, WanderJest, What Got Done, KetoHub, AllYourTexts
+  (8) · Educational = Refactoring English, Hit the Front Page of Hacker News (2) · Open-Source
+  Projects = ScreenJournal, PicoShare, ResticPy, LogPaste (4). An earlier pass reported **17**;
+  the listed enumeration is what 14 comes from.
 - Amos Wenger's landing page leads its content with "what i'm working on" — **4** current
   items — rather than with a complete list. ([fasterthanli.me](https://fasterthanli.me/))
-- `taniarascia.com/projects/` and `noidea.dog/projects` used markup my heading extractor did
-  not resolve; their item counts are **not measured** rather than reported as zero. [gap]
+- `taniarascia.com/projects/` — page exists (HTTP 200) but carries **no per-entry headings**:
+  its only headings are `<h1>Projects` plus two chrome `<h2>`s ("About Me", "Stay Connected"),
+  so the entries sit in markup a heading extractor cannot see. Its item count is **not
+  measured** rather than reported as zero. [gap — cause: extraction method, stated]
+- **`noidea.dog/projects` does not exist, and an earlier pass of this analysis blamed the
+  wrong cause.** It was listed above alongside taniarascia as an extractor limitation; it is
+  not one. On 2026-08-10 `/projects`, `/projects/` and `/project` each return **HTTP 404**,
+  and the site's nav item labelled "Projects" points at **`/`** — the full primary nav is
+  Projects → `/`, Book → `/staff`, Tech blog → `/blog`, nature/farm blog → `/tipperary`,
+  Talks → `/talks`, About → `/about`, Contact → `/contact`. The landing page **is** the
+  project collection (the blog lives separately at `/blog`), and it carries **4** entries as
+  `<h2>` elements: "Microservice Dependencies", "Talking About Talking", "Coding on Trains",
+  "Sonos Jukebox". [definitive as an enumeration — the four `<h2>`s and the seven nav targets
+  were each listed and counted; the 404s were probed directly]
+
+  > **Two disclosures on that entry.** (i) The count is reported here but is **not** fed into
+  > P9's comparison of curated project surfaces, because noidea.dog's landing page is doing two
+  > jobs at once and the genre is genuinely ambiguous — the entries read as essays as much as
+  > project cards. (ii) This makes noidea.dog a **boundary case in §2.2's lead-pattern
+  > partition**, where it is classified "writing list first." That classification is left
+  > standing: §2.2's third row measures *project tiles / card grids*, and this is a
+  > reverse-chronological list of headed text entries, not a card grid. The **0 of 21** finding
+  > is unaffected either way — reclassifying noidea.dog would move it between rows 1 and 2, not
+  > into row 3.
 
 ### 2.4 The availability page as its own artifact
 
 Two senior engineering leaders in the population converged on the same unusual artifact: a
-dedicated page enumerating *what you can ask me for*. Jacob Kaplan-Moss's `/help/` (1,258
-words including chrome) is structured as three headings — "Ways I'm available to help", "…
-help anyone", "… help underrepresented people in tech" — and opens *"Summary: want help?
+dedicated page enumerating *what you can ask me for*. Jacob Kaplan-Moss's `/help/`
+(**~1,250 words** including chrome — an **approximate** figure for the same reason §2.3's
+table is: extraction #1 returned 1,258 and extraction #2 (this pass, same method as §2.3)
+returned 1,240 on 2026-08-10, with a third extraction during the verifying pass reported at
+1,261. Nothing in this paper rests on the integer) is structured as three headings —
+"Ways I'm available to help",
+"… help anyone", "… help underrepresented people in tech" — and opens *"Summary: want help?
 Email me: jacob@<this domain>."* Will Larson published the same genre at
-`lethain.com/ways-i-help/`. [definitive that both artifacts exist and are so structured;
+`lethain.com/ways-i-help/`. [definitive that both artifacts exist and are so structured — the
+heading structure is an `<h1>` plus two `<h3>` elements, enumerated from the raw markup;
 "converged" is derived from two instances and is **weak evidence of a pattern** — two is not a
 trend, and this paper does not claim it is one]
 
@@ -263,7 +435,7 @@ trend, and this paper does not claim it is one]
 | **A. Writing-first index** (15 of 21) | Name → reverse-chron posts. Bio behind a link or absent. `danluu`, `nelhage`, `apenwarr` | **Peers**, maximally. Depth is self-evident; nothing to discount as marketing | **Recruiters** get no summary and must infer seniority from post titles. **Clients** get no offer and no path to act. Requires a real, sustained writing corpus — with 3 posts it reads as abandoned |
 | **B. Identity block → writing** (6 of 21) | 1–3 sentence bio + links, then content. `brooker`, `jacobian`, `fasterthanli`, `brandur` | All three, cheaply. The bio answers "who is this" in one screenful; the content answers "are they any good" | Nothing structural. The bio must be concrete — NN/g's homepage guidance warns that generic welcomes push the actual brief below the fold |
 | **C. Curated project surface** (`xeiaso`, `mtlynch`, `jvns`) | Small named set, one line each, own page for the long list | **Recruiters and clients** — scannable proof of shipped things. Peers respect it *when entries carry outcomes and users*, as Xe Iaso's do | Degenerates into a résumé restatement if entries are stack lists. A tile with a dead "Write-up →" is worse than no tile: it advertises depth and then fails to produce it — the current site's exact failure |
-| **D. Explicit availability surface** (`jacobian`, `lethain`; contact links on 4 of 21) | "Ways I'm available to help" / "Contact" | **Clients**, decisively. NN/g's B2B research is a direct indictment of sites that make prospects work to act | Rare in this population. §5.2 argues whether that rarity is a warning or an artifact of who the population is |
+| **D. Explicit availability surface** (`jacobian`, `lethain`; named contact affordances on 3 of 21, 5 if social-row email glyphs count — §2.3) | "Ways I'm available to help" / "Contact" | **Clients**, decisively. NN/g's B2B research is a direct indictment of sites that make prospects work to act | Rare in this population. §5.2 argues whether that rarity is a warning or an artifact of who the population is |
 
 **The archetypes compose.** `xeiaso.net` runs B+C in one page (name → Recent Articles →
 Notable Publications → Highlighted Projects → Quick Links); `jacobian.org` runs B+D
@@ -282,7 +454,7 @@ all three, which is stated honestly in §5.2. [derived from the enumerated struc
 NN/g's homepage principles put "Communicate Who You Are and What You Do" as Principle 2 of 5,
 with guideline **2.2** *"Include a tagline that explicitly conveys what your site or company
 does."* and **2.3** *"Emphasize the unique value your site brings to your users, as well as
-how it differentiates from competitors."*; the article warns that *"cheerful 'welcomes' on
+how it differentiates from competitors."*; the article warns that *"cheerful "welcomes" on
 homepages aren't helpful as they do not provide any information about your company"* and
 criticises a homepage that *"showcased a generic welcome message in the hero space of its
 homepage, consequently pushing the company brief below the fold."*
@@ -303,9 +475,12 @@ scrolling."* ([NN/g, Scrolling and Attention](https://www.nngroup.com/articles/s
 The derived rule: the fold should cut *through* the first real content section, so the page
 visibly continues. [definitive for the NN/g warning; the "cut through content" tactic is derived]
 
-**P4. Navigation is not a lead.** 15 of 21 sites put content, not a nav bar, in the first
-content position; those with nav keep it to a single thin row (`simonwillison`: About |
-Subscribe | TILs | Tools). [definitive as an observation of the population]
+**P4. Navigation is not a lead.** **21 of 21** sites put content, not a nav bar, in the first
+content position — 15 lead with a writing list and 6 with a short identity block (§2.2), and
+both are content; those with nav keep it to a single thin row (`simonwillison`: About |
+Subscribe | TILs | Tools). [definitive as an observation of the population — this is §2.2's
+lead-pattern partition read column-wise, and it is unanimous, which the earlier "15 of 21"
+phrasing understated by reusing the writing-first count for a proposition it does not measure]
 
 ### 4.2 Depth, and inline vs. link-out
 
@@ -330,23 +505,38 @@ single-page landing that links out to write-ups satisfies it. [definitive as an 
 
 **P8. A dead depth-link is a credibility defect, not an incomplete feature.** Derived from
 Fogg et al.'s finding that design/structure signals dominate credibility judgements (§1.2) plus
-NN/g's false-floor mechanism: a "Write-up →" that goes to `href="#"` (current `projects.js`)
-promises the exact thing the peer audience came for and fails to deliver it, in the highest-
-attention region of the page. **Ship a section with no link before shipping a link with no
-page.** [derived from Fogg 46.1% + NN/g fold manifesto]
+NN/g's false-floor mechanism: a "Write-up →" that goes to `href="#"` (current `projects.js`
+lines 13, 21, 29) promises the exact thing the peer audience came for and fails to deliver it,
+in the highest-attention region of the page. **Ship a section with no link before shipping a
+link with no page.** [derived from Fogg 46.1% + NN/g fold manifesto]
+
+**The same page carries a sharper instance of this class, and it outranks the dead links.**
+`projects.js` defines **four** array entries, not three; the fourth is
+`title: "Add your next project"` with a description that begins *"Copy any object above,
+change the fields, save."*, and `renderProjects()` maps the array unconditionally, so the
+scaffolding entry renders as a live fourth card in the grid. A dead "Write-up →" fails to
+deliver depth; a card publishing the site's own edit instructions tells the visitor the site
+is an unfinished template — which is a *design/structure* credibility signal of exactly the
+kind Fogg et al. found dominates (§1.2), and it costs one deleted object to remove.
+**Delete it before anything in §4.6 is built.** [definitive that the entry exists and renders
+— read directly from `projects.js`; the credibility consequence is derived]
 
 ### 4.3 How many projects, and selection over enumeration
 
 **P9. Curate to a small named set on the landing page; put the complete list elsewhere or
 nowhere.** Observed: 6 highlighted (xeiaso, on the landing page), 4 current (fasterthanli, on
-the landing page), 8 (jvns, on a dedicated page), 17 grouped into 3 categories (mtlynch, on a
+the landing page), 8 (jvns, on a dedicated page), 14 grouped into 3 categories (mtlynch, on a
 dedicated page). No site in the population puts a long enumeration on its landing page.
 [definitive as an enumeration of those four sites; the "curate" rule is derived]
 
 **P10. Three is defensible; the failure mode is not the count but the depth behind each.**
-The current site already shows 3 tiles. Nothing in the evidence says 3 is wrong — xeiaso ships
-6, fasterthanli 4. What the evidence does say is that each entry needs a one-line
-what-it-is-and-who-uses-it (xeiaso's pattern) and a real destination (P8). [derived]
+The current site shows **3 real project tiles plus a fourth placeholder card** ("Add your next
+project") that also renders (P8). Nothing in the evidence says **3** is wrong — xeiaso ships 6,
+fasterthanli 4. **The placeholder is a different question and is not defensible at any count**:
+it is not a fourth project, it is scaffolding on display, and P10's reasoning applies only once
+it is deleted. What the evidence does say about the three real entries is that each needs a
+one-line what-it-is-and-who-uses-it (xeiaso's pattern) and a real destination (P8). [derived;
+the 3-real-plus-1-placeholder composition is definitive, read from `projects.js`]
 
 **P11. Date and status each entry.** mtlynch's `/projects/` carries explicit ranges including
 end dates for retired work. Derived value: for the subject specifically, "running in
@@ -356,18 +546,45 @@ operational-track-record reading — the single highest-leverage sentence availa
 
 ### 4.4 The About question
 
-**P12. Short. Median 342 words, 8 of 12 at or under 500, including page chrome (§2.3).** An
-About page over ~600 words is at the top of the observed range. [definitive as an enumeration]
+**P12. Short. Median in the 330–370 band; 8–9 of 12 at or under 500 words — two-thirds to
+three-quarters, depending on extractor — including page chrome (§2.3).** None of the 12
+reaches 810 words under any of the three extractions; an About page over ~600 words is at the
+top of the observed range. **Target
+≤ ~400 words and the recommendation is safe under every extraction** — which is why §4.6
+item 6 is written to that number rather than to a table cell. [definitive for the band;
+the per-page integers are approximate and must not be cited individually — §2.3]
 
-**P13. First person.** All 12 About pages read and all 6 landing-page identity blocks quoted in
-§2.2 are first-person. Third-person appears once, in mtlynch's 83-word About ("Michael Lynch is
-a developer and blogger"), which is the shortest in the set. [definitive as an observation of
-this population]
+**P13. First person — with two disclosed departures, not one.** All **6** landing-page identity
+blocks read are first person (3 of the 6 are quoted in §2.2; the other 3 read *"Hey, I'm
+Tania!"*, *"I'm Brandur. This site is where I publish words and photos."*, and *"Hey! I'm
+Julia. Welcome to my blog."*). Of the 12 About pages, **10 are wholly first person**
+and **2 are not**:
 
-**P14. About is a *second-step* page; the landing page carries a bio *line*.** 13 of 21 put
-About behind a link while 6 put a short bio inline; the two that put a full bio inline
-(brooker, jacobian) keep it to 1–3 sentences. The derived structure: one identity line above
-the fold, the fuller story one click away. [definitive as an enumeration; the structure is derived]
+- `mtlynch` — wholly third person, and the shortest in the set: *"Michael Lynch is a developer
+  and blogger. He graduated from Columbia University in 2007 with a BS in Computer Science."*
+- `simonwillison` — first person in **frame**, third person in **body**: the page introduces
+  itself with *"Here's my most recent conference bio:"* and the bio that follows opens
+  *"Simon Willison is the creator of"* (the next word, "Datasette", is inside a link element,
+  which is why the quoted span stops there) and continues in the third person throughout —
+  *"He currently works full-time…"*. An earlier pass of this analysis counted it as first person; it is
+  the longest About in the set and the pattern is worth naming, because it is a way to get a
+  third-person credential paragraph onto a first-person site without the whole page reading as
+  a press release.
+
+[definitive as an observation of this population — all 12 pages re-read 2026-08-10; the
+derived reading is that first person is the default and third person appears where the text is
+doing *credentialing* work]
+
+**P14. About is a *second-step* page; the landing page carries a bio *line*.** §2.3's partition
+is disjoint and sums to 21: **13** put About behind a link, **2** put the bio inline instead of
+behind a link (`brooker`, `jacobian`), and **6** expose no bio in one step. The "13" and the
+"6 identity-led sites" of §2.2 are **not** complementary sets and must not be added — they
+overlap on 4 sites (`taniarascia`, `fasterthanli`, `brandur`, `jvns`) which carry **both** an
+inline identity line and an About link, and that overlap is precisely the recommended shape.
+The two inline-only sites keep it to 1–3 sentences. The derived structure: one identity line
+above the fold, the fuller story one click away — done by 4 of 21 explicitly, and by 13 of 21
+if the identity line is allowed to be the site title plus nav. [definitive as an enumeration;
+the structure is derived]
 
 **P15. What the About must contain, for three audiences at once.** NN/g's About-Us research
 observed *"over 70 users"* across three rounds and finds the same page serving job seekers,
@@ -390,7 +607,7 @@ is "Prompt Actions and Navigations", and the scrolling article's guidance is exp
 the top of the page for high-priority content: key business and user goals. The lower parts of
 the page can accommodate secondary or related information. Keep major CTAs above the fold."*
 ([NN/g](https://www.nngroup.com/articles/scrolling-and-attention/)) [definitive as NN/g
-guidance; the application to a personal site is derived and is in tension with §2.3's 4-of-21
+guidance; the application to a personal site is derived and is in tension with §2.3's 3-of-21
 observation — see §5.2]
 
 **P17. For the client audience, "contact" is weaker than "what you can ask me for."** NN/g's
@@ -404,11 +621,16 @@ mostly US with some UK sessions. ([NN/g, B2B Usability](https://www.nngroup.com/
 the engineer population — but on two instances only, so it is a **candidate**, not a
 demonstrated pattern. [derived, weak]
 
-**P18. An email address beats a form for this audience.** Observed: of the 4 contact
-affordances in §2.3, hillelwayne is a bare `mailto:`, and jacobian's `/help/` opens by giving
-the address in its first line. No contact **form** was observed in the population. [definitive
-as an observation; note the population is small and forms may exist behind the `/contact/`
-pages I did not fetch — recorded as a limit, not asserted as absence]
+**P18. An email address beats a form for this audience.** Observed, under §2.3's enumeration:
+every instance of email exposure in the population is either a plain `mailto:` href
+(`hillelwayne`, `ciechanow.ski`, `noidea.dog` — three anchors, all of them social-row glyphs,
+which is why none of the three *by itself* satisfies §2.3's contact criterion) or an address
+given in prose (jacobian's `/help/` opens by giving it in the first line). No contact **form**
+was observed in the population. [definitive as an observation; note the population is small and
+forms may exist behind the `/contact/` and `/help/` pages not fetched — recorded as a limit,
+not asserted as absence. The *rarity* of a named contact surface (§2.3) and the *form-free*
+character of the email that does appear are two separate observations and are not evidence for
+each other]
 
 ### 4.6 The recommended section list for this subject
 
@@ -445,8 +667,15 @@ evaluates a *personal engineering portfolio* was located via (a) targeted web se
 academic PDFs on portfolio evaluation, (b) URL probing of NN/g's article namespace for
 `ux-portfolios`, `portfolio-review-ux` (both HTTP 404 on 2026-08-10), (c) Crossref and Semantic
 Scholar lookups on the adjacent first-impression literature. **Every NN/g finding in this paper
-was collected on corporate, e-commerce, B2B, news, or encyclopedic sites** — NN/g's scrolling
-study says so directly: *"including news, ecommerce, blogs, FAQs, and encyclopedic pages."*
+was collected on corporate, e-commerce, B2B, news, blog, or encyclopedic sites** — NN/g's
+scrolling study says so directly: *"including news, ecommerce, blogs, FAQs, and encyclopedic
+pages."* **Blogs are in that list, and that matters in this paper's favour**: the blog is the
+genre closest to this population — 15 of the 21 sites *are* blogs by structure (§2.2) — so the
+scrolling finding is not being carried across a genre boundary at all. This **narrows the
+transfer gap without closing it**: the study analysed those pages in aggregate and reports no
+blog-only breakdown, so how much of the 57%/74% distribution came from blog pages is not
+recoverable from the article, and the remaining NN/g findings this paper leans on (homepage
+principles, B2B, About-Us) carry no blog population at all.
 The transfer to a one-person portfolio is this paper's inference and could be wrong in the
 usual direction: a visitor to a named individual's site arrives with more intent and more
 patience than a visitor to a vendor's homepage, which would *weaken* the above-the-fold
@@ -458,8 +687,10 @@ argument and *strengthen* the case for depth on the page. [gap, with method stat
 research shows prospect-facing sites failing exactly at the act-now step, and NN/g's homepage
 guidance says keep major CTAs above the fold.
 
-**The case against — and it is not weak:** only **4 of 21** sites in the peer-respected
-population carry a landing-page contact affordance (§2.3), and **none of the 21 runs
+**The case against — and it is not weak:** only **3 of 21** sites in the peer-respected
+population carry a named landing-page contact affordance, and **5 of 21** even if a bare email
+glyph in a social-icon row is allowed to count (§2.3) — the case against survives either
+criterion, and the stricter one makes it stronger. **None of the 21 runs
 archetypes B, C and D together**. The composition proposed in §3 and §4.6 is therefore
 *unobserved*. If the rarity reflects a real norm — that a hire-me surface reads as consulting
 marketing and costs peer standing — then §4.6 item 7 is the paper's most likely error.
@@ -538,14 +769,14 @@ locally; quoted spans character-exact):**
 6. NN/g, *Long vs. Short Articles as Content Strategy* — https://www.nngroup.com/articles/content-strategy-long-vs-short/
 7. NN/g, *Homepage Design Principles* — https://www.nngroup.com/articles/homepage-design-principles/
 8. NN/g, *B2B Usability* — https://www.nngroup.com/articles/b2b-usability/
-9. NN/g, *First Impressions Matter: How Designers Can Support Humans' Automatic Cognitive Processing* — https://www.nngroup.com/articles/first-impressions-human-automaticity/
+9. NN/g, *First Impressions Matter: How Designers Can Support Humans' Automatic Cognitive Processing* — https://www.nngroup.com/articles/first-impressions-human-automaticity/ — **CONSULTED, NOT RELIED ON.** No claim in this paper is cited to it; it is listed so the sweep is auditable, not to lend weight. Its subject (automatic processing of first impressions) is covered here by sources 10 and 12, which are peer-reviewed.
 
 **Peer-reviewed / academic:**
 
 10. Fogg, Soohoo, Danielson, Marable, Stanford, Tauber, *How do users evaluate the credibility of Web sites? A study with over 2,500 participants*, DUX '03 — https://doi.org/10.1145/997078.997097 (read via mirror PDF https://pureprose.wordpress.com/wp-content/uploads/2010/11/webcredibility.pdf)
 11. Weinreich, Obendorf, Herder, Mayer, *Not Quite the Average: An Empirical Study of Web Use*, ACM TWEB 2(1), 2008 — https://doi.org/10.1145/1326561.1326566
 12. Lindgaard, Fernandes, Dudek, Brown, *Attention web designers: You have 50 milliseconds to make a good first impression!*, Behaviour & Information Technology 25(2):115–126, 2006 — metadata via https://api.crossref.org/works/10.1080/01449290500330448 (abstract not retrievable; cited for existence only)
-13. Tuch, Presslaber, Stöcklin, Opwis, Bargas-Avila, *The role of visual complexity and prototypicality regarding first impression of websites*, IJHCS, 2012 — metadata via https://api.crossref.org/works/10.1016/j.ijhcs.2012.06.003 (abstract not retrievable; cited for existence only)
+13. Tuch, Presslaber, Stöcklin, Opwis, Bargas-Avila, *The role of visual complexity and prototypicality regarding first impression of websites*, IJHCS, 2012 — metadata via https://api.crossref.org/works/10.1016/j.ijhcs.2012.06.003 (abstract not retrievable) — **CONSULTED, NOT RELIED ON.** Existence and bibliographic facts confirmed, abstract not; no claim in this paper rests on it, and none should be built on it downstream without reading the full text.
 
 **First-party primary artifacts — the enumerated engineer-site population (all fetched 2026-08-10):**
 
@@ -593,7 +824,7 @@ Each item names what would decide it, because none of these is answerable from s
 - **T6 — Where does the fold actually land?** P3 says cut the fold through content. **Test:**
   mechanical — measure the first-section boundary at 1920×1080, 1440×900, and a 390 px-wide
   phone, and confirm content is visibly clipped at each.
-- **T7 — How many curated work entries before scanning degrades?** §2.3 observes 4, 6, 8 and 17
+- **T7 — How many curated work entries before scanning degrades?** §2.3 observes 4, 6, 8 and 14
   in different placements but nothing measures the threshold. **Test:** 3 vs. 6 entries in front
   of the recruiter-proxy audience, timed to first stated impression.
 
