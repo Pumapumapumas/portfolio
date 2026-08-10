@@ -368,7 +368,7 @@ MDN's `color-scheme` reference, verbatim from raw `.md`:
 
 and, on the division of labour:
 
-> Component authors must use the [`prefers-color-scheme`](/en-US/docs/Web/CSS/Reference/At-rules/@media/prefers-color-scheme) media feature to support the color schemes on the rest of the elements.
+> Component authors must use the [`prefers-color-scheme`](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/At-rules/@media/prefers-color-scheme) media feature to support the color schemes on the rest of the elements.
 
 [S4] **[definitive]**. The current site declares no `color-scheme`, which means its scrollbar and form-control chrome render light against a `#0e0f13` page.
 
