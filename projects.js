@@ -62,6 +62,16 @@ const projects = [
     link: { label: "runonflux.com", href: "https://runonflux.com/flux-ai/" },
   },
   {
+    title: "Custom Split Keyboard — ZMK Firmware",
+    kicker: "Personal build",
+    year: "2025–26",
+    description:
+      "A split keyboard shaped to my hand — a compound-curved layout with a separate angle for the thumb clusters, dual thumb trackballs (one mouse, one scroll), and a layered keymap that trades a full key count for fewer, better-placed keys. Runs ZMK firmware on a Seeed XIAO BLE (nRF52840) with a shift-register matrix; custom board + shield definitions, built in GitHub Actions.",
+    tags: ["ZMK / Zephyr", "nRF52840", "Ergonomic", "Firmware", "Hardware"],
+    image: "",
+    link: { label: "GitHub", href: "https://github.com/helloskyy-io/keyboard-ZMK-XIAOv4-SR" },
+  },
+  {
     title: "Coursework project (M.S., ECU)",
     kicker: "reminder — replace",
     description:
