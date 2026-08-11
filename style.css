@@ -1,97 +1,145 @@
 /* ============================================================
-   CENTRAL STYLE — change these variables to re-theme the WHOLE site.
-   This block is the single source of truth for the look.
+   CENTRAL STYLE — tokens drive the whole look. Edit :root.
+   Hand-written, no build step.
    ============================================================ */
 :root {
+  /* color */
   --bg:        #0e0f13;
   --surface:   #16181f;
   --surface-2: #1d2029;
-  --border:    #262a35;
+  --edge:      #2a2f3c;   /* structural borders */
+  --edge-ui:   #646d82;   /* interactive borders — ≥3:1 on --bg (WCAG 1.4.11) */
   --text:      #e7e9ee;
   --muted:     #9aa0ad;
-  --accent:    #5b8cff;
-  --accent-2:  #7c5cff;
-  --radius:    14px;
-  --maxw:      900px;
-  --font:      -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  --mono:      "SF Mono", "JetBrains Mono", "Fira Code", ui-monospace, monospace;
+  --accent:    #7aa2ff;   /* single accent, high-contrast text on dark */
+
+  /* type scale (6 steps) */
+  --f-0: 0.875rem; --f-1: 1rem; --f-2: 1.125rem; --f-3: 1.375rem;
+  --f-hero: clamp(2.2rem, 6vw, 3.4rem);
+
+  /* spacing scale (one system, replaces the old grab-bag of px values) */
+  --s-1: 4px;  --s-2: 8px;  --s-3: 12px; --s-4: 16px; --s-5: 24px;
+  --s-6: 32px; --s-7: 48px; --s-8: 72px; --s-9: 96px;
+
+  --radius: 14px;
+  --maxw:   940px;
+  --font:   system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --mono:   ui-monospace, "JetBrains Mono", "Fira Code", monospace;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
+
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+}
+
 body {
   background: var(--bg);
   color: var(--text);
   font-family: var(--font);
+  font-size: var(--f-1);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
 }
-.container { max-width: var(--maxw); margin: 0 auto; padding: 0 24px; }
+.container { max-width: var(--maxw); margin: 0 auto; padding: 0 var(--s-5); }
+
+a { color: var(--accent); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
 
 /* ---- HERO ---- */
-.hero { padding: 96px 0 56px; }
+.hero { padding: var(--s-9) 0 var(--s-6); }
 .hero__name {
-  font-size: clamp(2.4rem, 6vw, 3.6rem);
+  font-size: var(--f-hero);
   font-weight: 700;
   letter-spacing: -0.02em;
-  background: linear-gradient(120deg, var(--accent), var(--accent-2));
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  color: var(--text);              /* solid — the gradient headline was the biggest stock "tell" */
 }
-.hero__tagline { color: var(--muted); font-size: 1.05rem; margin-top: 10px; }
-.hero__intro { margin-top: 20px; max-width: 58ch; font-size: 1.12rem; }
-.hero__links { display: flex; gap: 14px; margin-top: 28px; flex-wrap: wrap; }
+.hero__role { color: var(--muted); font-size: var(--f-2); margin-top: var(--s-3); }
+.hero__thesis { margin-top: var(--s-5); max-width: 60ch; font-size: var(--f-2); }
+.hero__links { display: flex; gap: var(--s-3); margin-top: var(--s-6); flex-wrap: wrap; }
 .hero__links a {
-  color: var(--text); text-decoration: none; font-size: 0.95rem;
-  padding: 8px 16px; border: 1px solid var(--border); border-radius: 999px;
-  transition: border-color .15s, color .15s, transform .15s;
+  color: var(--text); text-decoration: none; font-size: var(--f-0);
+  padding: var(--s-2) var(--s-4); border: 1px solid var(--edge-ui); border-radius: 999px;
+  transition: border-color .15s, color .15s;
 }
-.hero__links a:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-1px); }
+.hero__links a:hover { border-color: var(--accent); color: var(--accent); }
+
+/* ---- PROOF STRIP ---- */
+.proof { padding: var(--s-4) 0; }
+.proof__list { list-style: none; display: flex; flex-wrap: wrap; gap: var(--s-3); }
+.proof__item {
+  font-size: var(--f-0); color: var(--text);
+  background: var(--surface); border: 1px solid var(--edge);
+  padding: var(--s-2) var(--s-4); border-radius: 999px;
+}
+.proof__hint { color: var(--muted); }
 
 /* ---- SECTIONS ---- */
-section { padding: 36px 0; }
+section { padding: var(--s-6) 0; }
 .section__title {
-  font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.14em;
-  color: var(--muted); margin-bottom: 22px;
+  font-size: var(--f-0); text-transform: uppercase; letter-spacing: 0.14em;
+  color: var(--muted); margin-bottom: var(--s-5);
 }
-.about p { max-width: 65ch; }
+.about p { max-width: 65ch; margin-bottom: var(--s-4); }
+.about p:last-child { margin-bottom: 0; }
 
-/* ---- PROJECT GRID (tiles render from projects.js) ---- */
+/* ---- WORK GRID ---- */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 18px;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--s-4);
 }
 .card {
   background: var(--surface);
-  border: 1px solid var(--border);
+  border: 1px solid var(--edge);
   border-radius: var(--radius);
-  padding: 22px;
-  display: flex; flex-direction: column; gap: 12px;
-  transition: transform .15s, border-color .15s, background .15s;
+  overflow: hidden;
+  display: flex; flex-direction: column;
+  transition: border-color .15s, background .15s;
 }
-.card:hover { transform: translateY(-3px); border-color: var(--accent); background: var(--surface-2); }
-.card__head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
-.card__title { font-size: 1.15rem; font-weight: 650; }
-.card__year { color: var(--muted); font-size: 0.78rem; font-family: var(--mono); white-space: nowrap; }
-.card__desc { color: var(--muted); font-size: 0.95rem; flex: 1; }
-.card__tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.card:hover { border-color: var(--edge-ui); background: var(--surface-2); }
+.card__img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; display: block; }
+.card__img--placeholder {
+  display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(135deg, var(--surface-2), var(--bg));
+  color: var(--muted); font-family: var(--mono); font-size: 1.4rem;
+  letter-spacing: 0.1em; text-transform: uppercase;
+}
+.card__body { padding: var(--s-5); display: flex; flex-direction: column; gap: var(--s-3); flex: 1; }
+.card__head { display: flex; justify-content: space-between; align-items: baseline; gap: var(--s-3); }
+.card__kicker {
+  display: block; font-size: 0.72rem; text-transform: uppercase;
+  letter-spacing: 0.08em; color: var(--muted); margin-bottom: 2px;
+}
+.card__title { font-size: var(--f-3); font-weight: 650; line-height: 1.2; }
+.card__year { color: var(--muted); font-size: var(--f-0); font-family: var(--mono); white-space: nowrap; }
+.card__desc { color: var(--muted); font-size: var(--f-0); flex: 1; }
+.card__tags { display: flex; flex-wrap: wrap; gap: var(--s-1); }
 .tag {
   font-size: 0.72rem; font-family: var(--mono);
-  color: var(--accent); background: rgba(91, 140, 255, 0.10);
+  color: var(--accent); background: rgba(122, 162, 255, 0.12);
   padding: 3px 9px; border-radius: 6px;
 }
-.card__links { display: flex; gap: 14px; margin-top: 2px; }
-.card__links a { color: var(--accent); text-decoration: none; font-size: 0.85rem; }
+.card__links a { color: var(--accent); text-decoration: none; font-size: var(--f-0); }
 .card__links a:hover { text-decoration: underline; }
+
+/* ---- CONTACT ---- */
+.contact a { color: var(--accent); text-decoration: none; }
+.contact a:hover { text-decoration: underline; }
 
 /* ---- FOOTER ---- */
 .footer {
-  padding: 52px 0; margin-top: 24px;
-  color: var(--muted); font-size: 0.85rem;
-  border-top: 1px solid var(--border);
+  padding: var(--s-7) 0; margin-top: var(--s-5);
+  color: var(--muted); font-size: var(--f-0);
+  border-top: 1px solid var(--edge);
 }
 
-/* ---- RESPONSIVE ---- */
-@media (max-width: 560px) { .hero { padding: 64px 0 40px; } }
+/* ---- RESPONSIVE / MOTION ---- */
+@media (max-width: 560px) { .hero { padding: var(--s-8) 0 var(--s-6); } }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

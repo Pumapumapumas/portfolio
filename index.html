@@ -4,42 +4,66 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Eric Rue — Portfolio</title>
-  <meta name="description" content="Software architect & infrastructure engineer — selected work." />
+  <meta name="description" content="Eric Rue — software architect & infrastructure engineer. Selected work in infrastructure, AI platforms, and automation." />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <main class="container">
 
-    <!-- ===== HERO  (edit name / tagline / intro) ===== -->
+    <!-- ===== HERO ===== -->
     <header class="hero">
       <h1 class="hero__name">Eric Rue</h1>
-      <p class="hero__tagline">Software architect · infrastructure engineer · biomedical informatics (M.S.)</p>
-      <p class="hero__intro">
-        I build complete systems end to end — from a self-hosted private cloud to the
-        businesses that run on top of it.
+      <p class="hero__role">Software architect · infrastructure engineer · M.S. Computer Science</p>
+      <p class="hero__thesis">
+        I design, build, and operate production infrastructure and AI-powered applications.
+        I give AI the ability to reach out into the real world.
       </p>
-      <nav class="hero__links">
-        <a href="https://github.com/Pumapumapumas" target="_blank" rel="noopener">GitHub</a>
+      <nav class="hero__links" aria-label="Profiles">
+        <a href="https://github.com/helloskyy-io" target="_blank" rel="noopener">GitHub</a>
         <a href="https://www.linkedin.com/in/eric-rue-bb84693a/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="mailto:info@helloskyy.io">Email</a>
       </nav>
     </header>
 
-    <!-- ===== ABOUT  (edit the paragraph) ===== -->
+    <!-- ===== PROOF STRIP — replace with 3–5 CHECKABLE facts (real numbers, not a stack list) ===== -->
+    <section class="proof" aria-label="At a glance">
+      <ul class="proof__list">
+        <li class="proof__item">Add a checkable fact <span class="proof__hint">— e.g. GPU nodes across FluxEdge</span></li>
+        <li class="proof__item">Add a checkable fact <span class="proof__hint">— e.g. platform uptime over a window</span></li>
+        <li class="proof__item">Add a checkable fact <span class="proof__hint">— e.g. node provisioning / rebuild time</span></li>
+      </ul>
+    </section>
+
+    <!-- ===== SELECTED WORK (cards render from projects.js) ===== -->
+    <section class="work">
+      <h2 class="section__title">Selected work</h2>
+      <div id="projects" class="grid"></div>
+    </section>
+
+    <!-- ===== ABOUT (draft — edit freely) ===== -->
     <section class="about">
       <h2 class="section__title">About</h2>
       <p>
-        I'm a software architect and engineer who builds whole systems, not just pieces.
-        Most recently I designed and built a self-hosted private cloud — Kubernetes, Temporal,
-        Ceph, GitOps, foundation-up — and I bring the same end-to-end, automate-everything
-        approach to the businesses I run on top of my own infrastructure. I'm also completing
-        an M.S. in biomedical informatics.
+        I'm a software architect and infrastructure engineer. My path runs across disciplines —
+        Architectural Engineering (A.S.), Industrial Engineering Technology (B.S.), and Computer
+        Science (M.S.) — and it has landed on building and operating software systems end to end.
+      </p>
+      <p>
+        <!-- FILL: what the platform is + what depends on it — keep it truthful and dated. -->
+        Most recently I've been building a self-hosted private cloud — Proxmox, K3s, a Django and
+        Temporal control plane, Ceph storage, and ArgoCD GitOps — governed by documented
+        architecture standards and a declarative, reviewed deploy path.
+      </p>
+      <p>
+        It's one operator, so this isn't evidence of leading a team — it's evidence of owning a
+        system end to end, including the pager.
       </p>
     </section>
 
-    <!-- ===== PROJECTS  (data lives in projects.js — don't edit this block) ===== -->
-    <section class="projects">
-      <h2 class="section__title">Projects</h2>
-      <div id="projects" class="grid"></div>
+    <!-- ===== CONTACT ===== -->
+    <section class="contact">
+      <h2 class="section__title">Contact</h2>
+      <p><a href="mailto:info@helloskyy.io">info@helloskyy.io</a> · <a href="https://www.linkedin.com/in/eric-rue-bb84693a/" target="_blank" rel="noopener">LinkedIn</a></p>
     </section>
 
     <!-- ===== FOOTER ===== -->
