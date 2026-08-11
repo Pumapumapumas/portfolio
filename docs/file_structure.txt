@@ -28,6 +28,10 @@ portfolio/                                      # Static portfolio site — publ
 │                                               #   and in the step summary (Image Pipeline Standard §6.2).
 │
 ├── testing/                                    # Tier-1 test location (Testing Standard, Multi-Repo Conventions)
+│   ├── check-policy.yaml                       # Machine-readable declaration of which CI checks gate a merge
+│   │                                           #   (Testing Standard). Its narrative counterpart is README.md §
+│   │                                           #   "What the contract check gates, and what it does not" — the
+│   │                                           #   two MUST agree.
 │   ├── run-all.sh                              # Master runner — discovers every executable *.sh here except
 │   │                                           #   itself, and fails on an empty discovery. All suites must be
 │   │                                           #   reachable from here; a test outside discovery is a defect.
@@ -35,11 +39,46 @@ portfolio/                                      # Static portfolio site — publ
 │                                               #   listens :8080, serves this repo's real content.
 │
 └── docs/
-    └── file_structure.txt                      # This file — annotated repo map.
+    ├── file_structure.txt                      # This file — annotated repo map.
+    │
+    └── standards/                              # Only standards this repo must hold LOCALLY live here;
+        │                                       #   every other standard is referenced by path from CLAUDE.md.
+        ├── research/                           # VENDORED — a verbatim MIRROR of mdc-master-planning's
+        │   │                                   #   standards/development/research/. Amend UPSTREAM, then
+        │   │                                   #   re-vendor; never edit the local copy. It is vendored
+        │   │                                   #   because the research workflow reads its artifact
+        │   │                                   #   contract from inside the target repo and stops without
+        │   │                                   #   one — so an in-repo copy is the robust form of adoption.
+        │   ├── README.md                       # What the mirror is, and how to re-vendor it.
+        │   └── research_standard.md            # The contract every research artifact conforms to.
+        │
+        └── architecture/
+            └── research/                       # docs/standards/architecture/research — the product-level
+                │                               #   research POOL. Findings that could change WHAT the
+                │                               #   portfolio is. Evidence, NEVER binding: nothing here is
+                │                               #   a decision until a human codifies it.
+                ├── README.md                   # Which altitude belongs here, and the pool's rules.
+                ├── topics.md                   # The size memory — tier, topic list, gaps named.
+                ├── synthesis.md                # The deliverable the standup consumes. REWRITTEN every
+                │                               #   cycle — nothing durable may live only here.
+                ├── candidates.md               # Action candidates (C-NNN). Survives the synthesis rewrite.
+                │                               #   `decision` is planning's output, never research's.
+                ├── direction.md                # Operator rulings queue (D-NNN). `status` is human-set.
+                └── raw/                        # One mini-paper per topic. Each header carries Last
+                    │                           #   validated / Revalidate / Confidence / Critic verdict, so
+                    │                           #   a paper read alone carries its own verification record.
+                    ├── .gitkeep                # Holds the dir when the pool is empty.
+                    ├── audience-calibration-and-anti-patterns.md
+                    ├── case-study-craft-for-systems-work.md
+                    ├── design-language-2026.md
+                    ├── portfolio-structure-and-content.md
+                    └── self-built-system-as-senior-signal.md
 
 # NOT in this repo:
 #   - The Helm chart that deploys this image      -> skyy-command/deployments/workload/portfolio/chart/
 #   - Per-cluster values for k3s-w1               -> desired-state-sturdy-wheat-pelican/container/k3s-w1/workload/portfolio/
-#   - Platform standards                          -> mdc-master-planning/standards/
+#   - Platform standards                          -> mdc-master-planning/standards/ — with ONE exception: the
+#                                                    Research Standard is vendored above at docs/standards/research/
+#                                                    as a verbatim mirror, amended upstream and re-vendored.
 #   - assets/                                     -> does not exist yet; the Dockerfile's COPY line for it is
 #                                                    intentionally commented out until images are added.
