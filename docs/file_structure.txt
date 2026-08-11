@@ -28,6 +28,10 @@ portfolio/                                      # Static portfolio site — publ
 │                                               #   and in the step summary (Image Pipeline Standard §6.2).
 │
 ├── testing/                                    # Tier-1 test location (Testing Standard, Multi-Repo Conventions)
+│   ├── check-policy.yaml                       # Machine-readable declaration of which CI checks gate a merge
+│   │                                           #   (Testing Standard). Its narrative counterpart is README.md §
+│   │                                           #   "What the contract check gates, and what it does not" — the
+│   │                                           #   two MUST agree.
 │   ├── run-all.sh                              # Master runner — discovers every executable *.sh here except
 │   │                                           #   itself, and fails on an empty discovery. All suites must be
 │   │                                           #   reachable from here; a test outside discovery is a defect.
