@@ -20,6 +20,16 @@ CI runs the same check as the `verify` job. It **blocks publishing** — `build`
 
 `index.html`, `style.css`, and `projects.js` are the operator's content. Do not edit them for infrastructure reasons — if a change to the container requires a content change, surface it rather than making it.
 
+## Deploying a content change
+
+The path from an edited file to the live site, and the two traps on it:
+
+1. **Edit content → `./testing/run-all.sh` → commit + push to `main`.** CI builds and publishes the image (verify-gates-publish, ~1 min).
+2. **Bump `?v=` in `index.html` whenever you change `style.css` or `projects.js`.** Cloudflare edge-caches those two assets for ~4h (`max-age=14400`); `index.html` itself is never cached (`cf-cache-status: DYNAMIC`). A fresh `?v` makes the asset a URL Cloudflare has never seen, so the edit goes live immediately instead of stalling behind the 4h cache. A skipped bump is the single most likely reason "it deployed but the site looks unchanged."
+3. **Operator runs the adopt (sudo):** `sudo /opt/skyy-net/skyy-command/lib/temporal/scripts/adopt_portfolio_image_start.sh`. It resolves `ghcr.io/pumapumapumas/portfolio:latest` to its digest and writes it into the per-cluster `instance.yaml` in desired-state. **Wait for `:latest` to actually move, not just for CI to go green** — GHCR updates the tag a beat after the check flips, so an adopt fired too early resolves the *old* digest and no-ops (empty diff). A real adopt leaves a one-line digest diff; an empty diff means it ran too early — re-run it.
+4. **Review the one-line digest diff in desired-state, commit + push.** ArgoCD converges on the next reconcile (~3–6 min).
+5. **Verify against the LIVE site, never ArgoCD `Synced/Healthy`.** The pod is node-pinned; a green sync can sit in front of a stale edge cache or a 504. Load `https://portfolio.helloskyy.io` (or `curl` the specific asset) and confirm the actual content.
+
 ## What this repo does NOT contain
 
 - **The Helm chart that deploys this image** — `skyy-command/deployments/workload/portfolio/chart/`
